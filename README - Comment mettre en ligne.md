@@ -19,58 +19,39 @@ Comptez **30 à 45 minutes** la première fois. Vous n'avez besoin d'aucune comp
 
 ---
 
-## Étape 1 — Configurer Formspree (15 min)
+## Étape 1 — Activer la réception des formulaires (5 min)
 
-Formspree est le service qui réceptionne les soumissions de vos formulaires et vous les envoie par email.
+Les deux formulaires (Particuliers + Artistes) sont déjà branchés sur **Formsubmit**, un service gratuit qui transfère les soumissions directement par email. **Aucun compte à créer**. Les soumissions arrivent dans la boîte `aly.william@gmail.com`.
 
-### Création du compte
+### Une seule action de votre côté : activer chaque formulaire
 
-1. Aller sur [formspree.io](https://formspree.io) et cliquer **"Get Started"**
-2. Créer un compte avec votre email pro (`sheila@blaedagency.com`)
-3. Confirmer votre email
+Le premier envoi de chaque formulaire déclenche un email de confirmation envoyé par Formsubmit à `aly.william@gmail.com`. Vous devez cliquer le lien d'activation pour valider l'endpoint. C'est une protection anti-spam standard. Après cette confirmation unique, toutes les vraies soumissions arrivent normalement.
 
-### Créer 2 formulaires (un pour les particuliers, un pour les artistes)
+**À faire immédiatement après le déploiement** :
 
-Le plan gratuit Formspree permet 2 formulaires actifs et 50 soumissions / mois — largement suffisant pour la phase de pré-lancement.
+1. Ouvrir l'URL publique de votre site (du type `scenario-prelaunch.netlify.app`)
+2. **Soumettre le formulaire Particuliers** une fois (utilisez vos vraies infos, c'est juste pour activer)
+3. **Soumettre le formulaire Artistes** une fois aussi
+4. Aller sur la boîte `aly.william@gmail.com`
+5. Vous trouverez **deux emails** de `noreply@formsubmit.co` intitulés "Confirm Subscription"
+6. Cliquer le lien de confirmation dans chaque email
+7. C'est terminé. Toutes les soumissions futures arriveront directement dans votre boîte.
 
-**Formulaire 1 — Particuliers**
+### Ce que vous recevrez à chaque soumission
 
-1. Dans le dashboard Formspree, cliquer **"+ New Form"**
-2. **Form name** : `Scenario - Particuliers`
-3. **Email recipient** : votre email (`sheila@blaedagency.com`)
-4. Cliquer **"Create Form"**
-5. Copier l'**endpoint URL** affiché (du type `https://formspree.io/f/abc1xyz9`)
-6. Garder cette URL sous le coude
+Un email formaté en tableau avec :
+- Le type d'inscrit (particulier / artiste)
+- Tous les champs remplis
+- L'horodatage de la soumission
 
-**Formulaire 2 — Artistes**
+Le visiteur, lui, recevra un **email automatique de remerciement** (différencié selon qu'il est particulier ou artiste). Vous pouvez modifier le texte de cette réponse automatique dans le code : cherchez `_autoresponse` dans `index.html` et adaptez.
 
-Répéter exactement la même opération avec :
-- **Form name** : `Scenario - Artistes`
-- Et copier le **deuxième endpoint URL**
+### Conseils
 
-### Brancher les endpoints dans le fichier
-
-Ouvrir `index.html` dans n'importe quel éditeur de texte (TextEdit sur Mac, Notepad sur Windows, ou mieux : VS Code gratuit).
-
-Faire **Ctrl+F** (ou Cmd+F sur Mac) et chercher :
-
-```
-REMPLACER_PAR_VOTRE_ID_FORMSPREE_PARTICULIERS
-```
-
-Remplacer la ligne entière par votre **premier endpoint** Formspree. Exemple :
-
-```html
-<!-- Avant -->
-<form action="https://formspree.io/f/REMPLACER_PAR_VOTRE_ID_FORMSPREE_PARTICULIERS" method="POST">
-
-<!-- Après -->
-<form action="https://formspree.io/f/abc1xyz9" method="POST">
-```
-
-Faire de même avec `REMPLACER_PAR_VOTRE_ID_FORMSPREE_ARTISTES` en collant votre **deuxième endpoint**.
-
-Sauvegarder le fichier.
+- **Surveillez bien votre boîte les premiers jours**. Les emails Formsubmit peuvent parfois atterrir en spam au début — marquez-les comme "Non spam" pour entraîner Gmail à les laisser passer.
+- **Pour exporter vos leads en lot** : Formsubmit ne propose pas de dashboard par défaut. Filtrez vos emails Gmail avec `from:noreply@formsubmit.co` puis utilisez un outil comme [emailmeform](https://www.emailmeform.com/) ou un script Apps Script Gmail pour les compiler en Google Sheet.
+- **Si vous voulez plus de fonctionnalités** (dashboard, export CSV, webhooks, intégration Slack/Notion) → migrez à terme vers Formspree ([formspree.io](https://formspree.io)), Tally ([tally.so](https://tally.so)) ou Web3Forms ([web3forms.com](https://web3forms.com)). Tous ont des plans gratuits généreux.
+- **Changer l'email destinataire** plus tard : ouvrir `index.html`, faire Cmd+F sur `aly.william@gmail.com`, remplacer par votre nouvelle adresse aux **deux** endroits (un par formulaire). Re-soumettre une fois pour reconfirmer.
 
 ---
 

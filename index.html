@@ -695,9 +695,12 @@
         <li>Service GUSO offert sur la première réservation</li>
       </ul>
 
-      <!-- ⚠ REMPLACER l'attribut action par votre endpoint Formspree -->
-      <form action="https://formspree.io/f/REMPLACER_PAR_VOTRE_ID_FORMSPREE_PARTICULIERS" method="POST">
+      <!-- Formulaire branché sur Formsubmit (envoie les soumissions à aly.william@gmail.com) -->
+      <form action="https://formsubmit.co/aly.william@gmail.com" method="POST">
         <input type="hidden" name="_subject" value="[Scenario] Nouvelle inscription particulier">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_autoresponse" value="Bonjour, merci pour votre inscription à Scenario ! Nous vous recontacterons en priorité dès l'ouverture de la plateforme, prévue pour l'été 2026. À très vite.">
+        <input type="text" name="_honey" style="display:none">
         <input type="hidden" name="type" value="particulier">
 
         <div class="form-row">
@@ -751,9 +754,12 @@
         <li>Service GUSO automatisé, fini la paperasse</li>
       </ul>
 
-      <!-- ⚠ REMPLACER l'attribut action par votre endpoint Formspree -->
-      <form action="https://formspree.io/f/REMPLACER_PAR_VOTRE_ID_FORMSPREE_ARTISTES" method="POST">
+      <!-- Formulaire branché sur Formsubmit (envoie les soumissions à aly.william@gmail.com) -->
+      <form action="https://formsubmit.co/aly.william@gmail.com" method="POST">
         <input type="hidden" name="_subject" value="[Scenario] Nouvelle inscription artiste">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_autoresponse" value="Bonjour, merci pour votre intérêt pour Scenario ! Votre demande d'inscription artiste a bien été reçue. Nous reviendrons vers vous rapidement pour échanger sur votre profil. À très bientôt.">
+        <input type="text" name="_honey" style="display:none">
         <input type="hidden" name="type" value="artiste">
 
         <div class="form-row">
@@ -870,8 +876,12 @@
       <div>
         <h4>Contact</h4>
         <ul>
-          <li><a href="mailto:contact@scenario.fr">contact@scenario.fr</a></li>
+          <li><a href="mailto:aly.william@gmail.com">aly.william@gmail.com</a></li>
+          <!-- WhatsApp désactivé pour le moment. Pour réactiver :
+               1) décommenter la ligne ci-dessous ; 2) remplacer REMPLACER_PAR_VOTRE_NUMERO
+               par votre numéro au format international sans + ni espaces (ex : 33612345678)
           <li><a href="https://wa.me/REMPLACER_PAR_VOTRE_NUMERO?text=Bonjour%2C%20je%20viens%20du%20site%20Scenario.%20J%27aimerais%20en%20savoir%20plus." target="_blank" rel="noopener">WhatsApp</a></li>
+          -->
         </ul>
       </div>
       <div>
@@ -897,9 +907,14 @@
   </div>
 </footer>
 
-<!-- ============ WHATSAPP FLOATING BUTTON ============ -->
-<!-- ⚠ REMPLACER "REMPLACER_PAR_VOTRE_NUMERO" par votre numéro au format international SANS le + et SANS espaces.
-     Exemple : pour le 06 12 34 56 78 français → utiliser 33612345678 -->
+<!-- ============ WHATSAPP FLOATING BUTTON (désactivé pour le moment) ============ -->
+<!--
+    Pour réactiver le bouton flottant WhatsApp quand vous aurez un numéro pro :
+    1) Décommenter le bloc <a class="wa-float">…</a> ci-dessous
+    2) Remplacer REMPLACER_PAR_VOTRE_NUMERO par votre numéro au format international
+       SANS le + et SANS espaces. Exemple : 06 12 34 56 78 → 33612345678
+    3) Décommenter aussi la ligne waFloat.classList.toggle dans le <script> en bas
+
 <a class="wa-float" id="waFloat"
    href="https://wa.me/REMPLACER_PAR_VOTRE_NUMERO?text=Bonjour%2C%20je%20viens%20du%20site%20Scenario.%20J%27aimerais%20en%20savoir%20plus."
    target="_blank" rel="noopener" aria-label="Discuter sur WhatsApp">
@@ -908,15 +923,16 @@
   </svg>
   <span class="wa-label">Une question ?</span>
 </a>
+-->
 
 <script>
   // Sticky header shadow when scrolled
   const header = document.getElementById('header');
-  const waFloat = document.getElementById('waFloat');
   window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 8);
-    // WhatsApp button appears after first scroll
-    waFloat.classList.toggle('visible', window.scrollY > 400);
+    // Si le bouton WhatsApp est réactivé, décommenter aussi ces 2 lignes :
+    // const waFloat = document.getElementById('waFloat');
+    // if (waFloat) waFloat.classList.toggle('visible', window.scrollY > 400);
   });
 </script>
 
