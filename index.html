@@ -695,12 +695,14 @@
         <li>Service GUSO offert sur la première réservation</li>
       </ul>
 
-      <!-- Formulaire branché sur Formsubmit (envoie les soumissions à aly.william@gmail.com) -->
-      <form action="https://formsubmit.co/aly.william@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="[Scenario] Nouvelle inscription particulier">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_autoresponse" value="Bonjour, merci pour votre inscription à Scenario ! Nous vous recontacterons en priorité dès l'ouverture de la plateforme, prévue pour l'été 2026. À très vite.">
-        <input type="text" name="_honey" style="display:none">
+      <!-- Formulaire branché sur Web3Forms (https://web3forms.com)
+           ⚠ REMPLACER ACCESS_KEY ci-dessous par la clé reçue par email après inscription
+           sur https://web3forms.com (entrer aly.william@gmail.com, valider l'email reçu) -->
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="e9dac017-6ee3-4e86-a671-a22c917c7d93">
+        <input type="hidden" name="subject" value="[Scenario] Nouvelle inscription particulier">
+        <input type="hidden" name="from_name" value="Scenario - Inscription Particulier">
+        <input type="checkbox" name="botcheck" style="display:none">
         <input type="hidden" name="type" value="particulier">
 
         <div class="form-row">
@@ -754,12 +756,13 @@
         <li>Service GUSO automatisé, fini la paperasse</li>
       </ul>
 
-      <!-- Formulaire branché sur Formsubmit (envoie les soumissions à aly.william@gmail.com) -->
-      <form action="https://formsubmit.co/aly.william@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="[Scenario] Nouvelle inscription artiste">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_autoresponse" value="Bonjour, merci pour votre intérêt pour Scenario ! Votre demande d'inscription artiste a bien été reçue. Nous reviendrons vers vous rapidement pour échanger sur votre profil. À très bientôt.">
-        <input type="text" name="_honey" style="display:none">
+      <!-- Formulaire branché sur Web3Forms (https://web3forms.com)
+           ⚠ Utiliser la MÊME clé que pour le formulaire Particuliers ci-dessus -->
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="e9dac017-6ee3-4e86-a671-a22c917c7d93">
+        <input type="hidden" name="subject" value="[Scenario] Nouvelle inscription artiste">
+        <input type="hidden" name="from_name" value="Scenario - Inscription Artiste">
+        <input type="checkbox" name="botcheck" style="display:none">
         <input type="hidden" name="type" value="artiste">
 
         <div class="form-row">
