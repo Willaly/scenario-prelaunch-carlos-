@@ -78,11 +78,24 @@
   .logo-dot {
     width: 10px; height: 10px; border-radius: 50%;
     background: var(--terracotta); display: inline-block;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.7); opacity: 0.6; }
   }
   .nav-links { display: none; gap: 36px; }
   @media (min-width: 768px) { .nav-links { display: flex; } }
-  .nav-link { font-size: 14px; color: var(--ink); transition: color .15s; }
-  .nav-link:hover { color: var(--terracotta); }
+  .nav-link {
+    font-size: 14px; color: var(--ink);
+    position: relative; padding: 4px 0;
+  }
+  .nav-link::after {
+    content: ''; position: absolute; left: 0; bottom: 0;
+    width: 0; height: 1px; background: currentColor;
+    transition: width .4s cubic-bezier(.6,.01,.05,.95);
+  }
+  .nav-link:hover::after { width: 100%; }
 
   /* ===== Buttons ===== */
   .btn {
@@ -134,6 +147,77 @@
   @media (max-width: 900px) { .hero h1 { font-size: 56px; } }
   @media (max-width: 600px) { .hero h1 { font-size: 44px; } }
   .hero h1 .it { font-style: italic; font-weight: 400; }
+  /* Hand-drawn circle around the italic word */
+  .circled-word {
+    position: relative; display: inline-block;
+    padding: 0 .1em;
+  }
+  .circled-word::after {
+    content: ''; position: absolute;
+    left: -8%; right: -8%; top: 6%; bottom: 6%;
+    border: 3px solid var(--terracotta);
+    border-radius: 50%;
+    transform: rotate(-3deg) scale(0.8);
+    opacity: 0; pointer-events: none;
+    animation: circle-in 1.2s cubic-bezier(.6,.01,.05,.95) 1.4s forwards;
+  }
+  @keyframes circle-in {
+    to { transform: rotate(-3deg) scale(1); opacity: 1; }
+  }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);
+    will-change: opacity, transform;
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal.delay-1 { transition-delay: .1s; }
+  .reveal.delay-2 { transition-delay: .2s; }
+  .reveal.delay-3 { transition-delay: .3s; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .circled-word::after { animation: none; opacity: 1; transform: rotate(-3deg) scale(1); }
+    .logo-dot { animation: none; }
+    .marquee-track { animation: none !important; }
+  }
+
+  /* ===== MARQUEE ===== */
+  .marquee {
+    border-top: 1px solid var(--ink-line);
+    border-bottom: 1px solid var(--ink-line);
+    padding: 32px 0; overflow: hidden;
+    white-space: nowrap; background: var(--cream-deep);
+  }
+  .marquee.dark {
+    background: var(--ink); color: var(--cream);
+    border-color: transparent;
+  }
+  .marquee-track {
+    display: inline-flex; gap: 60px;
+    animation: marquee-scroll 38s linear infinite;
+    padding-right: 60px;
+  }
+  .marquee.reverse .marquee-track { animation-direction: reverse; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  .marquee-item {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    font-size: clamp(40px, 6vw, 64px); line-height: 1;
+    letter-spacing: -.02em;
+    display: inline-flex; align-items: center; gap: 60px;
+  }
+  .marquee-item::after {
+    content: '✦';
+    color: var(--terracotta);
+    font-size: 22px;
+    display: inline-block;
+  }
+  .marquee.dark .marquee-item::after { color: var(--terracotta); }
+  .marquee-item .it { font-style: italic; font-weight: 400; }
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
   .hero p.sub {
     font-size: 17px; color: var(--ink); max-width: 480px;
     line-height: 1.55; margin: 0 0 40px 0;
@@ -540,7 +624,7 @@
     <div class="hero-eyebrow eyebrow with-dot">Pré-lancement · Île-de-France · Été 2026</div>
     <div class="hero-grid">
       <div>
-        <h1>L'art <span class="it">vivant</span>,<br>chez vous.</h1>
+        <h1>L'art <span class="circled-word"><span class="it">vivant</span></span>,<br>chez vous.</h1>
       </div>
       <div>
         <p class="sub">
@@ -563,32 +647,74 @@
   </div>
 </section>
 
+<!-- ============ MARQUEE 1 (claire) ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Musique <span class="it">classique</span></span>
+    <span class="marquee-item">Jazz</span>
+    <span class="marquee-item"><span class="it">Théâtre</span></span>
+    <span class="marquee-item">Magie</span>
+    <span class="marquee-item"><span class="it">Conte</span></span>
+    <span class="marquee-item">Danse</span>
+    <span class="marquee-item">Stand-up</span>
+    <span class="marquee-item"><span class="it">Variétés</span></span>
+    <!-- Duplicate set for seamless loop -->
+    <span class="marquee-item">Musique <span class="it">classique</span></span>
+    <span class="marquee-item">Jazz</span>
+    <span class="marquee-item"><span class="it">Théâtre</span></span>
+    <span class="marquee-item">Magie</span>
+    <span class="marquee-item"><span class="it">Conte</span></span>
+    <span class="marquee-item">Danse</span>
+    <span class="marquee-item">Stand-up</span>
+    <span class="marquee-item"><span class="it">Variétés</span></span>
+  </div>
+</div>
+
 <!-- ============ LE TERRAIN (fond noir) ============ -->
 <section class="terrain">
   <div class="container">
-    <div class="eyebrow with-dash" style="color: rgba(243,236,223,.5);">Le terrain</div>
-    <h2>Un marché qui <span class="it accent">attend</span> sa plateforme.</h2>
+    <div class="eyebrow with-dash reveal" style="color: rgba(243,236,223,.5);">Le terrain</div>
+    <h2 class="reveal delay-1">Un marché qui <span class="it accent">attend</span> sa plateforme.</h2>
     <div class="terrain-divider"></div>
     <div class="stats-grid">
-      <div class="stat">
+      <div class="stat reveal delay-2">
         <div class="stat-num">220<span class="sup">000</span></div>
         <div class="stat-lbl">mariages par an en France</div>
       </div>
-      <div class="stat">
+      <div class="stat reveal delay-2">
         <div class="stat-num">3 200</div>
         <div class="stat-lbl">artistes pré-inscrits sur la plateforme</div>
       </div>
-      <div class="stat">
+      <div class="stat reveal delay-2">
         <div class="stat-num">100<span class="sup">%</span></div>
         <div class="stat-lbl">conforme GUSO, automatiquement</div>
       </div>
-      <div class="stat">
+      <div class="stat reveal delay-2">
         <div class="stat-num">48<span class="sup">h</span></div>
         <div class="stat-lbl">pour recevoir trois devis personnalisés</div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- ============ MARQUEE 2 (sombre, reverse) ============ -->
+<div class="marquee dark reverse" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Mariages</span>
+    <span class="marquee-item"><span class="it">Anniversaires</span></span>
+    <span class="marquee-item">Cocktails</span>
+    <span class="marquee-item"><span class="it">Baptêmes</span></span>
+    <span class="marquee-item">Soirées privées</span>
+    <span class="marquee-item"><span class="it">Entreprises</span></span>
+    <!-- Duplicate set -->
+    <span class="marquee-item">Mariages</span>
+    <span class="marquee-item"><span class="it">Anniversaires</span></span>
+    <span class="marquee-item">Cocktails</span>
+    <span class="marquee-item"><span class="it">Baptêmes</span></span>
+    <span class="marquee-item">Soirées privées</span>
+    <span class="marquee-item"><span class="it">Entreprises</span></span>
+  </div>
+</div>
 
 <!-- ============ USP (3 raisons) ============ -->
 <section class="usp">
@@ -598,21 +724,21 @@
       <h2>Trouver un artiste, ça ne devrait pas être un <span class="it">parcours du combattant</span>.</h2>
     </div>
 
-    <div class="usp-item">
+    <div class="usp-item reveal">
       <div class="usp-mono">01 / Offre</div>
       <span class="usp-glyph">§</span>
       <h3>Une scène, qualifiée.</h3>
       <p>Musique, théâtre, magie, conte, danse. Tous nos artistes sont vérifiés et notés par leurs précédents clients. Vous savez exactement ce que vous réservez.</p>
     </div>
 
-    <div class="usp-item">
+    <div class="usp-item reveal">
       <div class="usp-mono">02 / Légal</div>
       <span class="usp-glyph">¶</span>
       <h3>GUSO inclus, <span class="it">zéro paperasse</span>.</h3>
       <p>La déclaration URSSAF obligatoire pour les particuliers est pré-remplie automatiquement à partir de votre réservation. Vous n'avez plus qu'à signer.</p>
     </div>
 
-    <div class="usp-item">
+    <div class="usp-item reveal">
       <div class="usp-mono">03 / Confiance</div>
       <span class="usp-glyph">†</span>
       <h3>Paiement <span class="it">séquestré</span>.</h3>
@@ -629,21 +755,21 @@
       <h2>Trois étapes, un <span class="it">événement</span>, un souvenir.</h2>
     </div>
 
-    <div class="how-step">
+    <div class="how-step reveal">
       <div class="how-num">01<span class="dot">.</span></div>
       <div class="step-lbl">Brief</div>
       <h3>Vous décrivez votre événement.</h3>
       <p>Date, lieu, nombre d'invités, ambiance recherchée, budget. En quelques minutes, Scenario comprend <span class="it">ce que vous voulez vivre</span>, pas juste ce que vous voulez acheter.</p>
     </div>
 
-    <div class="how-step">
+    <div class="how-step reveal">
       <div class="how-num">02<span class="dot">.</span></div>
       <div class="step-lbl">Sélection</div>
       <h3>Trois artistes vous répondent.</h3>
       <p>Sous 48h, deux ou trois artistes choisis pour leur expertise <span class="it">et</span> leur affinité avec votre projet vous proposent un devis personnalisé. Pas un catalogue, une rencontre.</p>
     </div>
 
-    <div class="how-step">
+    <div class="how-step reveal">
       <div class="how-num">03<span class="dot">.</span></div>
       <div class="step-lbl">Jour J</div>
       <h3>Vous accueillez.</h3>
@@ -655,12 +781,12 @@
 <!-- ============ PREVIEW ============ -->
 <section class="preview">
   <div class="container">
-    <div class="preview-head">
+    <div class="preview-head reveal">
       <div class="eyebrow with-dash">Aperçu</div>
       <h2>À quoi ressemblera la <span class="it">plateforme</span>.</h2>
       <p>Un aperçu cliquable du parcours utilisateur. Cliquez pour explorer la démo en grand.</p>
     </div>
-    <div class="preview-frame">
+    <div class="preview-frame reveal delay-2">
       <div class="preview-bar">
         <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
         <div class="preview-url">scenario.fr</div>
@@ -683,7 +809,7 @@
   <div class="forms-grid">
 
     <!-- PARTICULIERS -->
-    <div class="form-col" id="particuliers">
+    <div class="form-col reveal" id="particuliers">
       <div class="eyebrow with-dash">Pour les particuliers</div>
       <h2>Vous préparez un <span class="it">événement</span> ?</h2>
       <p>Scenario organise les premières mises en relation à Paris et en Île-de-France cet été. Inscrivez-vous pour être contacté en priorité dès l'ouverture.</p>
@@ -743,7 +869,7 @@
     </div>
 
     <!-- ARTISTES -->
-    <div class="form-col" id="artistes">
+    <div class="form-col reveal delay-1" id="artistes">
       <div class="eyebrow with-dash">Pour les artistes</div>
       <h2>Rejoignez le <span class="it">réseau</span>.</h2>
       <p>Scenario vous met en relation avec des particuliers qui valorisent votre travail et acceptent vos tarifs. Vous gardez la main sur votre calendrier. Nous gérons l'administratif et le GUSO.</p>
@@ -818,27 +944,27 @@
     </div>
 
     <div class="faq-list">
-      <details class="faq-item">
+      <details class="faq-item reveal">
         <summary class="faq-q">Quand Scenario sera-t-il disponible ?</summary>
         <p class="faq-a">Le lancement officiel est prévu pour l'été 2026 sur Paris et l'Île-de-France. Les inscrits aux pré-listes sont contactés en priorité dès l'ouverture, avec des conditions préférentielles sur les premières réservations.</p>
       </details>
-      <details class="faq-item">
+      <details class="faq-item reveal">
         <summary class="faq-q">C'est quoi le GUSO et pourquoi vous en parlez tout le temps ?</summary>
         <p class="faq-a">Le GUSO (Guichet Unique du Spectacle Occasionnel) est un dispositif obligatoire de l'URSSAF. Tout particulier qui rémunère un artiste du spectacle pour une prestation privée devient légalement employeur et doit déclarer la prestation. C'est une obligation ignorée par la majorité des organisateurs. Scenario en fait son cœur de promesse : nous gérons cette déclaration pour vous.</p>
       </details>
-      <details class="faq-item">
+      <details class="faq-item reveal">
         <summary class="faq-q">Combien ça coûte ?</summary>
         <p class="faq-a">Particuliers : pas d'abonnement. Frais de service de 5 % sur la prestation, transparents. Service GUSO en option à 25 € forfaitaires. Artistes : palier gratuit (5 demandes/mois, 15 % de commission) et palier Pro à 19 €/mois (illimité, 10 % de commission, plus de visibilité).</p>
       </details>
-      <details class="faq-item">
+      <details class="faq-item reveal">
         <summary class="faq-q">Quels types d'artistes seront référencés ?</summary>
         <p class="faq-a">Musique (chanteurs, musiciens, groupes, DJ), arts vivants (comédiens, stand-up, conteurs, magiciens), animation événementielle (close-up, animation enfants, danseurs). Au lancement, focus sur les artistes professionnels d'Île-de-France.</p>
       </details>
-      <details class="faq-item">
+      <details class="faq-item reveal">
         <summary class="faq-q">Comment garantissez-vous la qualité des artistes ?</summary>
         <p class="faq-a">Vérification d'identité et de statut juridique à l'inscription. Modération des profils (photos, tarifs). Système de notation par les clients après chaque prestation, sans modération de complaisance.</p>
       </details>
-      <details class="faq-item">
+      <details class="faq-item reveal">
         <summary class="faq-q">Et si l'artiste annule au dernier moment ?</summary>
         <p class="faq-a">Notre équipe vous trouve un remplaçant sous 24h selon disponibilité, ou nous vous remboursons intégralement. Conditions détaillées disponibles dans nos CGV à l'ouverture.</p>
       </details>
@@ -849,8 +975,8 @@
 <!-- ============ FINAL CTA ============ -->
 <section class="final-cta">
   <div class="container">
-    <h2>Donnez-leur <span class="it">une scène</span>.<br>Offrez-vous <span class="it">un souvenir</span>.</h2>
-    <a href="#particuliers" class="btn btn-primary">
+    <h2 class="reveal">Donnez-leur <span class="it">une scène</span>.<br>Offrez-vous <span class="it">un souvenir</span>.</h2>
+    <a href="#particuliers" class="btn btn-primary reveal delay-1">
       Rejoindre la liste
       <span class="btn-arrow">→</span>
     </a>
@@ -929,7 +1055,7 @@
 -->
 
 <script>
-  // Sticky header shadow when scrolled
+  // ─── Sticky header shadow when scrolled
   const header = document.getElementById('header');
   window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 8);
@@ -937,6 +1063,22 @@
     // const waFloat = document.getElementById('waFloat');
     // if (waFloat) waFloat.classList.toggle('visible', window.scrollY > 400);
   });
+
+  // ─── Reveal on scroll (sections qui apparaissent en fade-up)
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target); // once revealed, stop observing (perf)
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  } else {
+    // Fallback (vieux navigateurs) : tout est visible d'office
+    document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+  }
 </script>
 
 </body>
