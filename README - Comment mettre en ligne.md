@@ -218,6 +218,79 @@ Connectez-vous régulièrement à votre dashboard Formspree pour voir les soumis
 
 ---
 
+## Configurer le contact WhatsApp
+
+La landing inclut désormais un **bouton flottant WhatsApp** (en bas à droite, apparaît après scroll) et un **lien WhatsApp dans le footer**. Les deux pointent vers `REMPLACER_PAR_VOTRE_NUMERO` qu'il faut remplacer par votre vrai numéro.
+
+### Format du numéro
+
+Le numéro doit être au **format international, sans le `+`, sans espaces, sans tirets**.
+
+| Votre numéro affiché | Format à utiliser |
+|---|---|
+| 06 12 34 56 78 (France) | `33612345678` |
+| 07 89 12 34 56 (France) | `33789123456` |
+| +44 7700 900 123 (UK) | `447700900123` |
+
+### Brancher le numéro
+
+Ouvrir `index.html`, faire **Cmd+F (Mac) / Ctrl+F (Windows)** et chercher :
+
+```
+REMPLACER_PAR_VOTRE_NUMERO
+```
+
+Il apparaît **2 fois** (une fois pour le bouton flottant, une fois pour le lien footer). Remplacer les deux occurrences par votre numéro (par exemple `33612345678`).
+
+Tester en cliquant sur le bouton : WhatsApp doit s'ouvrir (web ou app) avec une conversation pré-remplie vers votre numéro et le message "Bonjour, je viens du site Scenario. J'aimerais en savoir plus."
+
+### Personnaliser le message pré-rempli
+
+Le message pré-rempli est encodé dans l'URL après `?text=`. Pour le modifier :
+
+1. Chercher dans le code les deux occurrences de `?text=Bonjour%2C%20je%20viens%20...`
+2. Écrire votre nouveau message en clair (par exemple "Bonjour Scenario, j'ai une question.")
+3. Le passer dans un encodeur d'URL : [urlencoder.org](https://www.urlencoder.org), copier le résultat et le coller à la place de l'ancien texte.
+
+### ⚠ Recommandé : utiliser WhatsApp Business
+
+Si le numéro que vous renseignez est votre numéro personnel, vous allez recevoir potentiellement beaucoup de messages mélangés avec vos conversations privées. Solution : créer un compte **WhatsApp Business** (gratuit, application séparée à télécharger).
+
+Avantages de WhatsApp Business :
+- Profil pro distinct du perso (logo, description, site web, horaires d'ouverture)
+- **Réponses automatiques** : message d'accueil pour les nouveaux contacts, message d'absence en dehors des heures d'ouverture
+- **Labels** pour organiser les conversations (Particulier intéressé, Artiste, Suivi, etc.)
+- Catalogue produit/service intégré
+- Statistiques basiques (messages envoyés/reçus/lus)
+
+Vous pouvez utiliser WhatsApp Business sur **un numéro dédié** (carte SIM Orange/Free à ~5 €/mois, ou numéro virtuel via OnOff, Sonetel, etc.) pour bien séparer.
+
+### Changer la couleur du bouton WhatsApp
+
+Le bouton est par défaut en **vert WhatsApp officiel** (`#25D366`) pour la reconnaissance immédiate des utilisateurs. Si vous préférez le passer en noir cohérent avec la palette éditoriale :
+
+Dans `index.html`, chercher la section `.wa-float` et remplacer :
+```css
+background: #25D366;
+```
+par :
+```css
+background: #0F0F0F;
+```
+
+Et dans `:hover` :
+```css
+background: #1FB855;
+```
+par :
+```css
+background: #D44523;
+```
+
+Mon conseil de consultant : gardez le vert. La perte d'élégance est minime, le gain en reconnaissance immédiate est réel. C'est exactement ce que font les sites pros (Airbnb, Booking, etc. utilisent le vert officiel).
+
+---
+
 ## Workflow GitHub (recommandé à terme)
 
 ### Pourquoi passer par GitHub ?
