@@ -1,0 +1,1834 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup v2 — Scenario · Plateforme artistes ↔ particuliers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Palette inspirée Airbnb */
+    --rausch: #FF385C;
+    --rausch-dark: #E00B41;
+    --rausch-darker: #BD1E59;
+    --gradient-cta: linear-gradient(135deg, #E61E4D 0%, #D70466 50%, #BD1E59 100%);
+    --gradient-cta-hover: linear-gradient(135deg, #BD1E59 0%, #BD1E59 100%);
+
+    --babu: #00A699;        /* teal/turquoise discret */
+    --arches: #FC642D;      /* orange chaud */
+    --hof: #484848;
+    --foggy: #767676;
+
+    --ink: #222222;
+    --ink-soft: #717171;
+    --ink-light: #B0B0B0;
+
+    --bg: #FFFFFF;
+    --bg-soft: #F7F7F7;
+    --bg-card: #FFFFFF;
+    --line: #EBEBEB;
+    --line-light: #F0F0F0;
+
+    --shadow-card: 0 6px 16px rgba(0,0,0,.12);
+    --shadow-soft: 0 2px 8px rgba(0,0,0,.06);
+    --shadow-search: 0 1px 2px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.08);
+    --shadow-sticky: 0 6px 16px rgba(0,0,0,.12);
+
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 999px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--ink);
+    background: #F2F2F2;
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  a { color: inherit; text-decoration: none; cursor: pointer; }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* ===== Sidebar de navigation entre écrans ===== */
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
+    background: white; padding: 24px 16px;
+    overflow-y: auto; z-index: 100;
+    border-right: 1px solid var(--line);
+  }
+  .sidebar h2 { font-size: 14px; font-weight: 700; margin: 0 0 6px 0; color: var(--ink); }
+  .sidebar p { font-size: 12px; color: var(--ink-soft); margin: 0 0 24px 0; line-height: 1.5; }
+  .sidebar nav { display: flex; flex-direction: column; gap: 2px; }
+  .sidebar a {
+    padding: 10px 14px; border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 500; color: var(--ink-soft);
+    transition: all .15s;
+  }
+  .sidebar a:hover { background: var(--bg-soft); color: var(--ink); }
+  .sidebar a.active { background: rgba(255,56,92,.08); color: var(--rausch); font-weight: 600; }
+  .sidebar .legend {
+    font-size: 11px; color: var(--ink-soft);
+    margin-top: 24px; padding-top: 16px;
+    border-top: 1px solid var(--line); line-height: 1.5;
+  }
+
+  /* ===== Container des écrans ===== */
+  main { margin-left: 240px; padding: 24px; }
+  .screen { display: none; max-width: 1320px; margin: 0 auto; }
+  .screen.active { display: block; }
+  .screen-label {
+    background: white; border-radius: var(--radius);
+    padding: 14px 20px; box-shadow: var(--shadow-soft);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 16px;
+    border-left: 3px solid var(--rausch);
+  }
+  .screen-label-num {
+    font-size: 12px; color: var(--ink-soft); font-weight: 600;
+    background: var(--bg-soft); padding: 4px 10px; border-radius: var(--radius-full);
+  }
+  .screen-label-title { font-size: 16px; font-weight: 700; }
+  .screen-label-desc { font-size: 13px; color: var(--ink-soft); }
+
+  /* ===== Browser frame ===== */
+  .browser {
+    background: white; border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow-card);
+    border: 1px solid var(--line);
+  }
+  .browser-bar {
+    background: #F7F7F7; padding: 10px 14px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #FF5F57; } .dot-y { background: #FEBC2E; } .dot-g { background: #28C840; }
+  .url {
+    flex: 1; background: white; border: 1px solid var(--line);
+    padding: 6px 14px; border-radius: var(--radius-full);
+    font-size: 12px; color: var(--ink-soft);
+    margin-left: 12px;
+  }
+  .browser-content { background: white; min-height: 600px; }
+
+  /* ===== Header de l'app (style Airbnb) ===== */
+  .app-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 40px; border-bottom: 1px solid var(--line);
+    background: white; position: sticky; top: 0; z-index: 50;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 6px;
+    font-weight: 800; font-size: 22px; color: var(--rausch);
+    letter-spacing: -.02em;
+  }
+  .logo-icon { font-size: 26px; }
+
+  .nav-pills {
+    display: flex; gap: 4px;
+    background: white;
+  }
+  .nav-pill {
+    padding: 10px 16px; border-radius: var(--radius-full);
+    font-size: 14px; font-weight: 500; color: var(--ink);
+    transition: background .15s;
+  }
+  .nav-pill:hover { background: var(--bg-soft); }
+  .nav-pill.active { font-weight: 600; }
+  .nav-pill.active::after {
+    content: ''; display: block; height: 2px; background: var(--ink);
+    margin-top: 6px; border-radius: 1px;
+  }
+
+  .header-right { display: flex; align-items: center; gap: 8px; }
+  .header-link {
+    padding: 12px 14px; border-radius: var(--radius-full);
+    font-size: 14px; font-weight: 600;
+    transition: background .15s;
+  }
+  .header-link:hover { background: var(--bg-soft); }
+
+  .user-pill {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 6px 6px 14px;
+    border: 1px solid var(--line); border-radius: var(--radius-full);
+    transition: all .15s;
+    box-shadow: var(--shadow-soft);
+  }
+  .user-pill:hover { box-shadow: var(--shadow-card); }
+  .user-icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--ink); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600;
+  }
+
+  /* ===== Buttons ===== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 24px; border-radius: var(--radius-sm);
+    font-size: 16px; font-weight: 600; border: none;
+    transition: all .15s;
+  }
+  .btn-primary {
+    background: var(--gradient-cta); color: white;
+  }
+  .btn-primary:hover { background: var(--gradient-cta-hover); transform: translateY(-1px); }
+  .btn-dark { background: var(--ink); color: white; }
+  .btn-dark:hover { background: #000; }
+  .btn-ghost {
+    background: transparent; color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  .btn-ghost:hover { background: var(--bg-soft); }
+  .btn-light {
+    background: white; color: var(--ink);
+    border: 1px solid var(--line); box-shadow: var(--shadow-soft);
+  }
+  .btn-light:hover { box-shadow: var(--shadow-card); }
+  .btn-sm { padding: 10px 16px; font-size: 14px; }
+  .btn-lg { padding: 16px 32px; font-size: 16px; }
+  .btn-block { width: 100%; justify-content: center; }
+
+  /* ===== Hero (style Airbnb) ===== */
+  .hero {
+    padding: 56px 40px 80px;
+    background: linear-gradient(180deg, #FFFAFB 0%, white 100%);
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    background: rgba(255,56,92,.08); color: var(--rausch);
+    padding: 6px 14px; border-radius: var(--radius-full);
+    font-size: 13px; font-weight: 600;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: 56px; font-weight: 800; line-height: 1.05;
+    margin: 0 0 18px 0; letter-spacing: -.025em;
+  }
+  .hero h1 .accent {
+    background: var(--gradient-cta);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 18px; color: var(--ink-soft);
+    max-width: 580px; margin: 0 auto 40px auto;
+    line-height: 1.5;
+  }
+
+  /* ===== Search bar Airbnb-like (pill avec divisions) ===== */
+  .search-pill {
+    display: flex; align-items: center;
+    background: white; border: 1px solid var(--line);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-search);
+    max-width: 880px; margin: 0 auto;
+    padding: 8px 8px 8px 0;
+    transition: box-shadow .2s;
+  }
+  .search-pill:hover { box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 12px 32px rgba(0,0,0,.12); }
+  .search-section {
+    flex: 1; padding: 14px 24px; cursor: pointer;
+    border-right: 1px solid var(--line);
+    border-radius: var(--radius-full);
+    transition: background .15s;
+  }
+  .search-section:hover { background: var(--bg-soft); }
+  .search-section:nth-last-child(2) { border-right: none; }
+  .search-section .lbl {
+    font-size: 12px; font-weight: 700; color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .search-section .val {
+    font-size: 14px; color: var(--ink-soft);
+  }
+  .search-section .val.filled { color: var(--ink); font-weight: 500; }
+  .search-btn {
+    background: var(--gradient-cta); color: white;
+    border: none; border-radius: var(--radius-full);
+    padding: 14px 22px; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+    transition: all .15s;
+  }
+  .search-btn:hover { transform: scale(1.02); }
+  .search-btn-icon {
+    background: rgba(255,255,255,.2); border-radius: 50%;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ===== Catégories style Airbnb ===== */
+  .categories {
+    display: flex; gap: 32px; padding: 24px 40px 0;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+  }
+  .cat {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding-bottom: 16px; cursor: pointer;
+    color: var(--ink-soft); flex-shrink: 0;
+    border-bottom: 2px solid transparent;
+    transition: all .15s;
+  }
+  .cat:hover { color: var(--ink); }
+  .cat.active { color: var(--ink); border-bottom-color: var(--ink); }
+  .cat-icon { font-size: 24px; }
+  .cat-label { font-size: 12px; font-weight: 600; white-space: nowrap; }
+
+  /* ===== Trust strip ===== */
+  .trust-strip {
+    display: flex; justify-content: center; gap: 64px;
+    padding: 48px 40px; background: white;
+    border-top: 1px solid var(--line-light);
+  }
+  .trust-item { text-align: center; }
+  .trust-num {
+    font-size: 32px; font-weight: 800; color: var(--ink);
+    letter-spacing: -.02em;
+  }
+  .trust-lbl { font-size: 13px; color: var(--ink-soft); margin-top: 4px; font-weight: 500; }
+
+  /* ===== USP section ===== */
+  .usp-section { padding: 80px 40px; background: var(--bg-soft); }
+  .usp-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .usp-card {
+    background: white; padding: 32px;
+    border-radius: var(--radius-lg);
+    transition: all .2s;
+  }
+  .usp-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+  }
+  .usp-card.featured {
+    background: linear-gradient(135deg, #FFF8F9 0%, #FFE5EB 100%);
+    border: 2px solid var(--rausch);
+  }
+  .usp-icon-wrap {
+    width: 56px; height: 56px; border-radius: var(--radius);
+    background: var(--bg-soft);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; font-size: 26px;
+  }
+  .usp-card.featured .usp-icon-wrap {
+    background: var(--rausch); color: white;
+  }
+  .usp-badge {
+    display: inline-block; padding: 4px 10px;
+    background: var(--rausch); color: white;
+    font-size: 11px; font-weight: 700;
+    border-radius: var(--radius-full);
+    margin-bottom: 12px;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .usp-card h3 {
+    font-size: 20px; font-weight: 700;
+    margin: 0 0 8px 0; letter-spacing: -.01em;
+  }
+  .usp-card p {
+    font-size: 15px; color: var(--ink-soft);
+    line-height: 1.5; margin: 0;
+  }
+
+  /* ===== Filtres horizontaux (chips) ===== */
+  .filter-bar {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    padding: 20px 40px; border-bottom: 1px solid var(--line);
+    align-items: center;
+  }
+  .filter-chip {
+    padding: 8px 16px; border-radius: var(--radius-full);
+    background: white; border: 1px solid var(--line);
+    font-size: 14px; font-weight: 500; color: var(--ink);
+    transition: all .15s;
+  }
+  .filter-chip:hover { border-color: var(--ink); }
+  .filter-chip.active {
+    background: var(--ink); color: white; border-color: var(--ink);
+  }
+  .filter-chip-icon { margin-right: 6px; }
+  .filter-divider { width: 1px; height: 24px; background: var(--line); margin: 0 4px; }
+
+  /* ===== Résultats : grille de cartes ===== */
+  .results-wrap { padding: 24px 40px 40px; }
+  .results-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 24px;
+  }
+  .results-count {
+    font-size: 22px; font-weight: 700; letter-spacing: -.01em;
+  }
+  .results-count .sub { font-size: 14px; color: var(--ink-soft); font-weight: 400; margin-left: 8px; }
+  .results-sort {
+    padding: 10px 16px; border-radius: var(--radius-full);
+    background: white; border: 1px solid var(--line);
+    font-size: 14px; cursor: pointer;
+  }
+
+  .artist-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px 16px;
+  }
+  .artist-card { cursor: pointer; transition: transform .15s; }
+  .artist-card:hover { transform: translateY(-2px); }
+  .artist-card:hover .artist-photo { box-shadow: var(--shadow-card); }
+  .artist-photo {
+    aspect-ratio: 1 / 1; border-radius: var(--radius-lg);
+    position: relative; overflow: hidden;
+    background: var(--bg-soft);
+    display: flex; align-items: flex-end; padding: 12px;
+    transition: box-shadow .2s;
+  }
+  .artist-photo.p1 { background: linear-gradient(135deg, #FF385C 0%, #BD1E59 100%); }
+  .artist-photo.p2 { background: linear-gradient(135deg, #FC642D 0%, #B73B12 100%); }
+  .artist-photo.p3 { background: linear-gradient(135deg, #00A699 0%, #006A65 100%); }
+  .artist-photo.p4 { background: linear-gradient(135deg, #6B47DC 0%, #3B2680 100%); }
+  .artist-photo.p5 { background: linear-gradient(135deg, #1A1A1A 0%, #4A4A4A 100%); }
+  .artist-photo.p6 { background: linear-gradient(135deg, #E8B339 0%, #B07F00 100%); }
+  .artist-photo.p7 { background: linear-gradient(135deg, #2C5F8F 0%, #133E66 100%); }
+  .artist-photo.p8 { background: linear-gradient(135deg, #C44569 0%, #8B2D4A 100%); }
+
+  .photo-fav {
+    position: absolute; top: 12px; right: 12px;
+    width: 32px; height: 32px;
+    background: rgba(0,0,0,.4); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 16px;
+    transition: transform .15s;
+  }
+  .photo-fav:hover { transform: scale(1.1); }
+  .photo-tier {
+    position: absolute; top: 12px; left: 12px;
+    padding: 4px 10px; border-radius: var(--radius-sm);
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .05em;
+    background: rgba(255,255,255,.95); color: var(--ink);
+    backdrop-filter: blur(8px);
+  }
+  .photo-tier.premium {
+    background: linear-gradient(135deg, #FFD700, #B8860B); color: white;
+  }
+  .photo-pagination {
+    position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 4px;
+  }
+  .photo-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.5); }
+  .photo-dot.active { background: white; }
+
+  .artist-info { padding: 12px 4px 0; }
+  .artist-info-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 8px; margin-bottom: 2px;
+  }
+  .artist-name {
+    font-size: 16px; font-weight: 600;
+    margin: 0; color: var(--ink);
+  }
+  .artist-rating {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 14px; font-weight: 500; flex-shrink: 0;
+  }
+  .star { color: var(--ink); }
+  .artist-meta {
+    font-size: 14px; color: var(--ink-soft);
+    margin: 2px 0;
+  }
+  .artist-price {
+    font-size: 14px; color: var(--ink); margin-top: 6px;
+  }
+  .artist-price strong { font-weight: 700; }
+
+  /* ===== Profil artiste ===== */
+  .profile-wrap { padding: 24px 80px 40px; max-width: 1280px; margin: 0 auto; }
+  .profile-back {
+    font-size: 14px; font-weight: 600; color: var(--ink);
+    text-decoration: underline; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-bottom: 20px;
+  }
+  .profile-title {
+    font-size: 26px; font-weight: 700; letter-spacing: -.01em;
+    margin: 0 0 6px 0;
+  }
+  .profile-subtitle {
+    font-size: 14px; color: var(--ink); margin: 0 0 20px 0;
+  }
+  .profile-subtitle .dot-sep { margin: 0 6px; }
+  .profile-actions { display: flex; gap: 12px; }
+
+  /* ===== Profile gallery (style Airbnb) ===== */
+  .gallery {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 200px 200px;
+    gap: 8px; height: 408px;
+    border-radius: var(--radius-lg); overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .gallery > div { position: relative; cursor: pointer; transition: filter .2s; }
+  .gallery > div:hover { filter: brightness(.92); }
+  .gallery .g1 {
+    grid-row: 1 / 3;
+    background: linear-gradient(135deg, #FF385C 0%, #BD1E59 100%);
+  }
+  .gallery .g2 { background: linear-gradient(135deg, #FC642D, #B73B12); }
+  .gallery .g3 { background: linear-gradient(135deg, #6B47DC, #3B2680); }
+  .gallery .g4 { background: linear-gradient(135deg, #00A699, #006A65); }
+  .gallery .g5 { background: linear-gradient(135deg, #E8B339, #B07F00); }
+  .gallery-show-all {
+    position: absolute; bottom: 16px; right: 16px;
+    background: white; padding: 8px 14px;
+    border-radius: var(--radius-sm); border: 1px solid var(--ink);
+    font-size: 13px; font-weight: 600;
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* ===== Profile body grid ===== */
+  .profile-body {
+    display: grid; grid-template-columns: 1fr 380px;
+    gap: 80px; padding-bottom: 40px;
+  }
+  .profile-section {
+    padding: 32px 0; border-bottom: 1px solid var(--line);
+  }
+  .profile-section:last-child { border-bottom: none; }
+  .profile-section h2 {
+    font-size: 22px; font-weight: 700;
+    margin: 0 0 16px 0; letter-spacing: -.01em;
+  }
+  .profile-section p {
+    font-size: 16px; color: var(--ink); line-height: 1.5;
+    margin: 0 0 12px 0;
+  }
+  .verified-row {
+    display: flex; align-items: center; gap: 12px;
+    padding-bottom: 24px; border-bottom: 1px solid var(--line);
+  }
+  .verified-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF385C, #BD1E59);
+    color: white; font-size: 24px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .verified-text { font-size: 16px; }
+  .verified-text strong { display: block; font-weight: 600; margin-bottom: 2px; }
+  .verified-text .sub { color: var(--ink-soft); font-size: 14px; }
+
+  /* ===== Tags ===== */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    padding: 8px 14px; border-radius: var(--radius-full);
+    background: var(--bg-soft); font-size: 14px; color: var(--ink);
+  }
+
+  /* ===== Reviews ===== */
+  .reviews-summary {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 24px;
+  }
+  .reviews-num {
+    font-size: 36px; font-weight: 700; letter-spacing: -.02em;
+  }
+  .review {
+    padding: 16px 0;
+  }
+  .review-head {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 8px;
+  }
+  .review-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #FC642D, #B73B12);
+    color: white; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .review-author { font-weight: 600; font-size: 15px; }
+  .review-date { font-size: 13px; color: var(--ink-soft); }
+  .review-text {
+    font-size: 15px; color: var(--ink);
+    line-height: 1.5; margin: 0;
+  }
+  .review-stars { font-size: 13px; color: var(--ink); margin-bottom: 4px; }
+
+  /* ===== Sticky booking widget (style Airbnb) ===== */
+  .booking-widget {
+    position: sticky; top: 100px;
+    background: white; border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 24px;
+    box-shadow: var(--shadow-card);
+  }
+  .booking-price {
+    display: flex; align-items: baseline; gap: 6px;
+    margin-bottom: 20px;
+  }
+  .booking-price .amount {
+    font-size: 24px; font-weight: 700;
+  }
+  .booking-price .unit { font-size: 16px; color: var(--ink); }
+  .booking-form {
+    border: 1px solid var(--ink); border-radius: var(--radius);
+    overflow: hidden; margin-bottom: 16px;
+  }
+  .bf-row { display: grid; grid-template-columns: 1fr 1fr; }
+  .bf-cell {
+    padding: 12px 14px; border: 1px solid transparent;
+    border-bottom: 1px solid var(--ink); cursor: pointer;
+  }
+  .bf-cell:first-child { border-right: 1px solid var(--ink); }
+  .bf-cell.full {
+    grid-column: 1 / 3; border-bottom: none;
+  }
+  .bf-cell:hover { background: var(--bg-soft); }
+  .bf-cell .lbl {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .05em;
+    margin-bottom: 4px;
+  }
+  .bf-cell .val { font-size: 14px; color: var(--ink); }
+  .booking-disclaimer {
+    text-align: center; font-size: 13px;
+    color: var(--ink-soft); margin: 12px 0 16px 0;
+  }
+  .price-breakdown { margin-top: 16px; }
+  .price-row {
+    display: flex; justify-content: space-between;
+    padding: 8px 0; font-size: 15px;
+  }
+  .price-row.under { text-decoration: underline; cursor: pointer; }
+  .price-row.total {
+    border-top: 1px solid var(--line);
+    margin-top: 8px; padding-top: 16px;
+    font-weight: 700; font-size: 16px;
+  }
+
+  /* ===== Pricing ===== */
+  .pricing-section {
+    padding: 64px 40px; background: var(--bg-soft);
+  }
+  .pricing-section h1 {
+    text-align: center; font-size: 40px; font-weight: 800;
+    margin: 0 0 12px 0; letter-spacing: -.02em;
+  }
+  .pricing-section .sub {
+    text-align: center; color: var(--ink-soft);
+    margin: 0 0 48px 0; font-size: 16px;
+  }
+  .tier-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .tier-card {
+    background: white; border-radius: var(--radius-xl);
+    padding: 32px; border: 2px solid transparent;
+    position: relative; transition: all .2s;
+  }
+  .tier-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+  .tier-card.popular {
+    border-color: var(--rausch);
+    box-shadow: 0 16px 40px rgba(255,56,92,.15);
+    transform: scale(1.02);
+  }
+  .popular-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--gradient-cta); color: white;
+    padding: 6px 18px; border-radius: var(--radius-full);
+    font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .tier-name {
+    font-size: 14px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--ink-soft); margin-bottom: 16px;
+  }
+  .tier-price {
+    display: flex; align-items: baseline; gap: 6px;
+    margin-bottom: 4px;
+  }
+  .tier-price .amount {
+    font-size: 48px; font-weight: 800; letter-spacing: -.025em;
+  }
+  .tier-price .period { color: var(--ink-soft); font-size: 16px; }
+  .tier-tag {
+    font-size: 14px; color: var(--ink-soft);
+    margin-bottom: 24px;
+  }
+  .tier-features {
+    list-style: none; padding: 0; margin: 24px 0 0 0;
+    border-top: 1px solid var(--line); padding-top: 24px;
+  }
+  .tier-features li {
+    padding: 10px 0; font-size: 14px; color: var(--ink);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .tier-features li.dim { color: var(--ink-soft); }
+  .check {
+    color: var(--rausch); font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .dash {
+    color: var(--ink-light); font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .tier-card .btn {
+    width: 100%; justify-content: center; margin-top: 24px;
+  }
+
+  /* ===== Stepper ===== */
+  .stepper {
+    display: flex; gap: 0; padding: 28px 40px;
+    border-bottom: 1px solid var(--line); align-items: center;
+  }
+  .step {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--ink-soft); font-size: 14px; font-weight: 500;
+  }
+  .step.active { color: var(--ink); font-weight: 600; }
+  .step.done { color: var(--rausch); font-weight: 600; }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg-soft); color: var(--ink-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; flex-shrink: 0;
+  }
+  .step.active .step-num {
+    background: var(--ink); color: white;
+  }
+  .step.done .step-num {
+    background: var(--rausch); color: white;
+  }
+  .step-bar {
+    flex: 1; height: 2px; background: var(--line); margin: 0 16px;
+  }
+  .step.done + .step-bar { background: var(--rausch); }
+
+  /* ===== Forms ===== */
+  .form-page-wrap {
+    display: grid; grid-template-columns: 1fr 380px;
+    gap: 56px; padding: 40px 80px; max-width: 1280px; margin: 0 auto;
+  }
+  .form-block {
+    background: white; border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 28px;
+    margin-bottom: 20px;
+  }
+  .form-block h3 {
+    margin: 0 0 4px 0; font-size: 18px; font-weight: 700;
+  }
+  .form-block .block-sub {
+    margin: 0 0 20px 0; font-size: 14px; color: var(--ink-soft);
+  }
+  .form-row { margin-bottom: 16px; }
+  .form-row label {
+    display: block; font-size: 13px; font-weight: 600;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .form-row input, .form-row textarea, .form-row select {
+    width: 100%; padding: 14px 16px;
+    border: 1px solid var(--line); border-radius: var(--radius-sm);
+    font-size: 15px; font-family: inherit; color: var(--ink);
+    transition: border-color .15s;
+  }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus {
+    outline: none; border-color: var(--ink);
+  }
+  .form-row textarea { min-height: 100px; resize: vertical; }
+  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ===== GUSO callout (chaleureux) ===== */
+  .guso-callout {
+    background: linear-gradient(135deg, #FFF8F9, #FFE8EC);
+    border-left: 3px solid var(--rausch);
+    padding: 18px 20px; border-radius: var(--radius-sm);
+    margin-top: 16px;
+  }
+  .guso-callout h4 {
+    margin: 0 0 6px 0; font-size: 14px; font-weight: 700;
+    color: var(--rausch-darker);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .guso-callout p {
+    margin: 0; font-size: 14px; color: var(--ink); line-height: 1.5;
+  }
+  .guso-callout strong { color: var(--rausch-darker); }
+
+  /* ===== Checkbox row ===== */
+  .check-row {
+    display: flex; gap: 12px; padding: 14px 0;
+    cursor: pointer; align-items: flex-start;
+  }
+  .check-row input { margin-top: 4px; accent-color: var(--rausch); width: 18px; height: 18px; flex-shrink: 0; }
+  .check-row .check-text { flex: 1; font-size: 14px; color: var(--ink); line-height: 1.5; }
+  .check-row .check-text strong { font-weight: 600; }
+  .check-row .check-text .sub { color: var(--ink-soft); font-size: 13px; display: block; margin-top: 2px; }
+
+  /* ===== Booking summary (right column) ===== */
+  .summary-card {
+    position: sticky; top: 100px;
+    background: white; border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 24px;
+    box-shadow: var(--shadow-card);
+  }
+  .summary-card h3 {
+    margin: 0 0 16px 0; font-size: 16px; font-weight: 700;
+  }
+  .summary-artist {
+    display: flex; gap: 12px; padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .summary-artist-photo {
+    width: 60px; height: 60px; border-radius: var(--radius);
+    background: linear-gradient(135deg, #FF385C, #BD1E59);
+    flex-shrink: 0;
+  }
+  .summary-artist-info .name { font-weight: 600; font-size: 14px; }
+  .summary-artist-info .type { font-size: 13px; color: var(--ink-soft); }
+  .summary-artist-info .rating { font-size: 13px; margin-top: 4px; }
+  .summary-meta { padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .summary-row {
+    display: flex; justify-content: space-between;
+    padding: 6px 0; font-size: 14px;
+  }
+  .summary-row.label-only { color: var(--ink-soft); font-size: 13px; padding: 4px 0; }
+  .summary-section-title {
+    font-size: 16px; font-weight: 700; margin: 16px 0 8px 0;
+  }
+  .summary-row.total {
+    border-top: 1px solid var(--line); margin-top: 8px;
+    padding-top: 16px; font-weight: 700; font-size: 16px;
+  }
+
+  /* ===== Dashboard ===== */
+  .dashboard-wrap { padding: 32px 40px; background: var(--bg-soft); min-height: 80vh; }
+  .dashboard-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px;
+  }
+  .dashboard-greeting h1 {
+    font-size: 28px; font-weight: 700; margin: 0; letter-spacing: -.01em;
+  }
+  .dashboard-greeting p {
+    font-size: 14px; color: var(--ink-soft); margin: 4px 0 0 0;
+  }
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px; margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: white; border-radius: var(--radius-lg);
+    padding: 24px; transition: all .15s;
+  }
+  .kpi-card:hover { box-shadow: var(--shadow-soft); }
+  .kpi-label { font-size: 13px; color: var(--ink-soft); font-weight: 500; }
+  .kpi-value {
+    font-size: 32px; font-weight: 800; letter-spacing: -.02em;
+    margin: 8px 0 4px 0;
+  }
+  .kpi-value.alert { color: var(--rausch); }
+  .kpi-value.success { color: var(--babu); }
+  .kpi-sub { font-size: 12px; color: var(--ink-soft); }
+
+  .dashboard-grid {
+    display: grid; grid-template-columns: 2fr 1fr; gap: 16px;
+  }
+  .dashboard-card {
+    background: white; border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+  .dashboard-card h3 {
+    margin: 0 0 16px 0; font-size: 18px; font-weight: 700;
+  }
+  .request-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 0; border-bottom: 1px solid var(--line); gap: 16px;
+  }
+  .request-row:last-child { border-bottom: none; }
+  .request-info { flex: 1; }
+  .request-title { font-weight: 600; font-size: 15px; }
+  .request-detail { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+  .request-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+  /* ===== Footer ===== */
+  footer {
+    background: var(--bg-soft); padding: 48px 40px 32px;
+    border-top: 1px solid var(--line);
+  }
+  .footer-cols {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px; max-width: 1200px; margin: 0 auto;
+  }
+  footer h4 {
+    font-size: 14px; font-weight: 700;
+    margin: 0 0 16px 0; color: var(--ink);
+  }
+  footer ul { list-style: none; padding: 0; margin: 0; }
+  footer li {
+    font-size: 14px; color: var(--ink-soft);
+    padding: 6px 0;
+  }
+  footer li a:hover { color: var(--ink); text-decoration: underline; }
+  .footer-bottom {
+    max-width: 1200px; margin: 32px auto 0;
+    padding-top: 24px; border-top: 1px solid var(--line);
+    font-size: 13px; color: var(--ink-soft);
+    display: flex; justify-content: space-between;
+  }
+
+  /* ===== Annotation ===== */
+  .annotation {
+    background: #FFF8E1; border: 1px dashed #F4B400;
+    padding: 14px 16px; border-radius: var(--radius);
+    font-size: 13px; color: #6B5800; margin: 16px 0;
+    line-height: 1.5;
+  }
+  .annotation strong { color: #4A3D00; }
+</style>
+</head>
+<body>
+
+<!-- ============== SIDEBAR NAVIGATION ============== -->
+<aside class="sidebar">
+  <h2>Mockup interactif v2</h2>
+  <p>Style Airbnb · Plateforme Scenario</p>
+  <nav id="screen-nav">
+    <a class="active" data-screen="home">1. Accueil</a>
+    <a data-screen="results">2. Résultats de recherche</a>
+    <a data-screen="profile">3. Profil artiste</a>
+    <a data-screen="quote">4. Demande de devis</a>
+    <a data-screen="checkout">5. Paiement &amp; GUSO</a>
+    <a data-screen="pricing">6. Abonnements artistes</a>
+    <a data-screen="dashboard">7. Dashboard artiste</a>
+  </nav>
+  <div class="legend">
+    Encadrés jaunes = annotations PO. Non visibles dans la version livrée.
+  </div>
+</aside>
+
+<main>
+
+<!-- ============== ÉCRAN 1 : ACCUEIL ============== -->
+<section class="screen active" id="screen-home">
+  <div class="screen-label">
+    <span class="screen-label-num">1 / 7</span>
+    <div>
+      <div class="screen-label-title">Accueil</div>
+      <div class="screen-label-desc">Hero centré, search bar pill, catégories d'artistes en chips, USPs en cards.</div>
+    </div>
+  </div>
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <div class="url">scenario.fr</div>
+    </div>
+    <div class="browser-content">
+      <header class="app-header">
+        <a class="logo"><span class="logo-icon">♪</span> scenario</a>
+        <nav class="nav-pills">
+          <a class="nav-pill active">Trouver un artiste</a>
+          <a class="nav-pill">Devenir artiste</a>
+          <a class="nav-pill">Comment ça marche</a>
+        </nav>
+        <div class="header-right">
+          <a class="header-link">Aide</a>
+          <a class="user-pill">
+            <span style="font-size: 16px;">☰</span>
+            <span class="user-icon">S</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="hero">
+        <span class="hero-eyebrow">✨ Nouveau · Service GUSO inclus</span>
+        <h1>L'artiste qui rendra<br><span class="accent">votre événement inoubliable</span></h1>
+        <p class="hero-sub">Musiciens, chanteurs, comédiens, magiciens. Plus de 3 200 artistes vérifiés en France. Et la déclaration GUSO, c'est nous qui la faisons.</p>
+
+        <div class="search-pill">
+          <div class="search-section">
+            <div class="lbl">Type</div>
+            <div class="val filled">Musicien · chanteur</div>
+          </div>
+          <div class="search-section">
+            <div class="lbl">Où</div>
+            <div class="val filled">Paris</div>
+          </div>
+          <div class="search-section">
+            <div class="lbl">Quand</div>
+            <div class="val filled">15 juin 2026</div>
+          </div>
+          <div class="search-section">
+            <div class="lbl">Invités</div>
+            <div class="val">Combien ?</div>
+          </div>
+          <button class="search-btn" onclick="goTo('results')">
+            <span class="search-btn-icon">🔍</span>
+            Rechercher
+          </button>
+        </div>
+      </div>
+
+      <div class="categories">
+        <div class="cat active"><span class="cat-icon">🎤</span><span class="cat-label">Musique</span></div>
+        <div class="cat"><span class="cat-icon">🎭</span><span class="cat-label">Stand-up</span></div>
+        <div class="cat"><span class="cat-icon">🎩</span><span class="cat-label">Magie</span></div>
+        <div class="cat"><span class="cat-icon">🎧</span><span class="cat-label">DJ</span></div>
+        <div class="cat"><span class="cat-icon">💃</span><span class="cat-label">Danse</span></div>
+        <div class="cat"><span class="cat-icon">📖</span><span class="cat-label">Conte</span></div>
+        <div class="cat"><span class="cat-icon">🎨</span><span class="cat-label">Animation enfants</span></div>
+        <div class="cat"><span class="cat-icon">🎻</span><span class="cat-label">Quatuor classique</span></div>
+        <div class="cat"><span class="cat-icon">🪄</span><span class="cat-label">Close-up</span></div>
+      </div>
+
+      <div class="trust-strip">
+        <div class="trust-item"><div class="trust-num">3 200+</div><div class="trust-lbl">artistes vérifiés</div></div>
+        <div class="trust-item"><div class="trust-num">98 %</div><div class="trust-lbl">de satisfaction client</div></div>
+        <div class="trust-item"><div class="trust-num">4,8 ★</div><div class="trust-lbl">note moyenne</div></div>
+        <div class="trust-item"><div class="trust-num">100 %</div><div class="trust-lbl">conforme GUSO</div></div>
+      </div>
+
+      <div class="usp-section">
+        <div class="usp-grid">
+          <div class="usp-card">
+            <div class="usp-icon-wrap">🎵</div>
+            <h3>Une offre large et qualifiée</h3>
+            <p>Tous nos artistes sont vérifiés et notés par leurs précédents clients. Vous savez exactement ce que vous réservez.</p>
+          </div>
+          <div class="usp-card featured">
+            <span class="usp-badge">Notre signature</span>
+            <div class="usp-icon-wrap">📋</div>
+            <h3>GUSO inclus, zéro paperasse</h3>
+            <p>La déclaration URSSAF obligatoire est pré-remplie automatiquement. Vous n'avez plus qu'à signer en deux clics.</p>
+          </div>
+          <div class="usp-card">
+            <div class="usp-icon-wrap">🛡️</div>
+            <h3>Paiement séquestré</h3>
+            <p>Votre paiement n'est libéré à l'artiste qu'après la prestation. Litige ? Notre équipe arbitre sous 48h.</p>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="footer-cols">
+          <div>
+            <div class="logo" style="margin-bottom: 12px;"><span class="logo-icon">♪</span> scenario</div>
+            <p style="font-size: 13px; color: var(--ink-soft); margin: 0;">La plateforme française de mise en relation entre particuliers et artistes du spectacle vivant.</p>
+          </div>
+          <div><h4>Particuliers</h4><ul><li><a>Trouver un artiste</a></li><li><a>Comment ça marche</a></li><li><a>Service GUSO</a></li></ul></div>
+          <div><h4>Artistes</h4><ul><li><a>S'inscrire</a></li><li><a>Abonnements</a></li><li><a>Centre d'aide</a></li></ul></div>
+          <div><h4>Légal</h4><ul><li><a>CGU/CGV</a></li><li><a>Confidentialité</a></li><li><a>Médiation</a></li></ul></div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Scenario · SAS au capital de 1 000 €</span>
+          <span>FR · 🌐 EN</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ÉCRAN 2 : RÉSULTATS ============== -->
+<section class="screen" id="screen-results">
+  <div class="screen-label">
+    <span class="screen-label-num">2 / 7</span>
+    <div>
+      <div class="screen-label-title">Résultats de recherche</div>
+      <div class="screen-label-desc">Filtres en chips horizontaux (style Airbnb), grille de cartes carrées avec photos pleine largeur.</div>
+    </div>
+  </div>
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <div class="url">scenario.fr/recherche?type=musicien&amp;ville=paris</div>
+    </div>
+    <div class="browser-content">
+      <header class="app-header">
+        <a class="logo" onclick="goTo('home')"><span class="logo-icon">♪</span> scenario</a>
+        <div class="search-pill" style="max-width: 520px; padding: 4px 4px 4px 0; box-shadow: var(--shadow-soft);">
+          <div class="search-section" style="padding: 8px 18px;">
+            <div class="val filled" style="font-size: 13px;">Musicien · chanteur</div>
+          </div>
+          <div class="search-section" style="padding: 8px 18px;">
+            <div class="val filled" style="font-size: 13px;">Paris</div>
+          </div>
+          <div class="search-section" style="padding: 8px 18px;">
+            <div class="val" style="font-size: 13px; color: var(--ink-soft);">15 juin · 40 invités</div>
+          </div>
+          <button class="search-btn" style="padding: 8px 14px;">🔍</button>
+        </div>
+        <div class="header-right">
+          <a class="user-pill"><span style="font-size: 16px;">☰</span><span class="user-icon">S</span></a>
+        </div>
+      </header>
+
+      <div class="filter-bar">
+        <button class="filter-chip">⚙ Filtres</button>
+        <div class="filter-divider"></div>
+        <button class="filter-chip active">Tous styles</button>
+        <button class="filter-chip">Variété FR</button>
+        <button class="filter-chip">Jazz</button>
+        <button class="filter-chip">Pop</button>
+        <button class="filter-chip">Classique</button>
+        <button class="filter-chip">Soul / R&amp;B</button>
+        <div class="filter-divider"></div>
+        <button class="filter-chip"><span class="filter-chip-icon">📍</span>Moins de 50 km</button>
+        <button class="filter-chip"><span class="filter-chip-icon">€</span>500-2000 €</button>
+        <button class="filter-chip"><span class="filter-chip-icon">✓</span>Profil vérifié</button>
+      </div>
+
+      <div class="results-wrap">
+        <div class="results-header">
+          <div class="results-count">87 artistes <span class="sub">disponibles le 15 juin à Paris</span></div>
+          <button class="results-sort">Tri : Recommandé ▾</button>
+        </div>
+
+        <div class="artist-grid">
+          <div class="artist-card" onclick="goTo('profile')">
+            <div class="artist-photo p1">
+              <div class="photo-tier premium">★ Premium</div>
+              <div class="photo-fav">♡</div>
+              <div class="photo-pagination"><div class="photo-dot active"></div><div class="photo-dot"></div><div class="photo-dot"></div><div class="photo-dot"></div></div>
+            </div>
+            <div class="artist-info">
+              <div class="artist-info-top">
+                <div class="artist-name">Élise Marceau</div>
+                <div class="artist-rating"><span class="star">★</span> 4,9</div>
+              </div>
+              <div class="artist-meta">Chanteuse · Variété FR, jazz</div>
+              <div class="artist-meta">Paris 11ᵉ · 12 km</div>
+              <div class="artist-price">À partir de <strong>650 €</strong> / 2h</div>
+            </div>
+          </div>
+
+          <div class="artist-card">
+            <div class="artist-photo p2">
+              <div class="photo-tier">Pro</div>
+              <div class="photo-fav">♡</div>
+              <div class="photo-pagination"><div class="photo-dot active"></div><div class="photo-dot"></div><div class="photo-dot"></div></div>
+            </div>
+            <div class="artist-info">
+              <div class="artist-info-top">
+                <div class="artist-name">Trio Étincelles</div>
+                <div class="artist-rating"><span class="star">★</span> 4,8</div>
+              </div>
+              <div class="artist-meta">Groupe acoustique · Pop &amp; folk</div>
+              <div class="artist-meta">Saint-Denis · 18 km</div>
+              <div class="artist-price">À partir de <strong>1 200 €</strong> / 2h</div>
+            </div>
+          </div>
+
+          <div class="artist-card">
+            <div class="artist-photo p3">
+              <div class="photo-tier">Pro</div>
+              <div class="photo-fav">♡</div>
+            </div>
+            <div class="artist-info">
+              <div class="artist-info-top">
+                <div class="artist-name">Thomas Lemoine</div>
+                <div class="artist-rating"><span class="star">★</span> 4,7</div>
+              </div>
+              <div class="artist-meta">Pianiste-chanteur · Crooner</div>
+              <div class="artist-meta">Boulogne · 8 km</div>
+              <div class="artist-price">À partir de <strong>550 €</strong> / 2h</div>
+            </div>
+          </div>
+
+          <div class="artist-card">
+            <div class="artist-photo p4">
+              <div class="photo-fav">♡</div>
+            </div>
+            <div class="artist-info">
+              <div class="artist-info-top">
+                <div class="artist-name">Lina B.</div>
+                <div class="artist-rating"><span class="star">★</span> 4,6</div>
+              </div>
+              <div class="artist-meta">Chanteuse · Soul, R&amp;B</div>
+              <div class="artist-meta">Vitry · 15 km</div>
+              <div class="artist-price">À partir de <strong>490 €</strong> / 2h</div>
+            </div>
+          </div>
+
+          <div class="artist-card">
+            <div class="artist-photo p5">
+              <div class="photo-tier">Pro</div>
+              <div class="photo-fav">♡</div>
+            </div>
+            <div class="artist-info">
+              <div class="artist-info-top">
+                <div class="artist-name">Mathieu &amp; Sarah</div>
+                <div class="artist-rating"><span class="star">★</span> 4,9</div>
+              </div>
+              <div class="artist-meta">Duo guitare-voix · Variétés</div>
+              <div class="artist-meta">Montreuil · 9 km</div>
+              <div class="artist-price">À partir de <strong>720 €</strong> / 2h</div>
+            </div>
+          </div>
+
+          <div class="artist-card">
+            <div class="artist-photo p6">
+              <div class="photo-tier premium">★ Premium</div>
+              <div class="photo-fav">♡</div>
+            </div>
+            <div class="artist-info">
+              <div class="artist-info-top">
+                <div class="artist-name">Quatuor Saphir</div>
+                <div class="artist-rating"><span class="star">★</span> 5,0</div>
+              </div>
+              <div class="artist-meta">Quatuor à cordes · Classique, jazz</div>
+              <div class="artist-meta">Paris 16ᵉ · 6 km</div>
+              <div class="artist-price">À partir de <strong>1 800 €</strong> / 2h</div>
+            </div>
+          </div>
+
+          <div class="artist-card">
+            <div class="artist-photo p7">
+              <div class="photo-fav">♡</div>
+            </div>
+            <div class="artist-info">
+              <div class="artist-info-top">
+                <div class="artist-name">Léo Vasquez</div>
+                <div class="artist-rating"><span class="star">★</span> 4,5</div>
+              </div>
+              <div class="artist-meta">Chanteur-musicien · Bossa, latino</div>
+              <div class="artist-meta">Vincennes · 14 km</div>
+              <div class="artist-price">À partir de <strong>440 €</strong> / 2h</div>
+            </div>
+          </div>
+
+          <div class="artist-card">
+            <div class="artist-photo p8">
+              <div class="photo-tier">Pro</div>
+              <div class="photo-fav">♡</div>
+            </div>
+            <div class="artist-info">
+              <div class="artist-info-top">
+                <div class="artist-name">Camille Joubert</div>
+                <div class="artist-rating"><span class="star">★</span> 4,8</div>
+              </div>
+              <div class="artist-meta">Chanteuse · Standards américains</div>
+              <div class="artist-meta">Saint-Mandé · 11 km</div>
+              <div class="artist-price">À partir de <strong>590 €</strong> / 2h</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="annotation">
+          <strong>Note PO :</strong> les artistes Premium / Pro sont mis en avant via badge + tri pondéré (effet "Plus" sur Airbnb). Les artistes Free apparaissent sans badge plus bas dans la liste. Cette hiérarchie justifie économiquement les abonnements artistes.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ÉCRAN 3 : PROFIL ARTISTE ============== -->
+<section class="screen" id="screen-profile">
+  <div class="screen-label">
+    <span class="screen-label-num">3 / 7</span>
+    <div>
+      <div class="screen-label-title">Profil artiste</div>
+      <div class="screen-label-desc">Galerie en mosaïque, sticky booking widget à droite, sections décomposées comme un Airbnb listing.</div>
+    </div>
+  </div>
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <div class="url">scenario.fr/artiste/elise-marceau</div>
+    </div>
+    <div class="browser-content">
+      <header class="app-header">
+        <a class="logo" onclick="goTo('home')"><span class="logo-icon">♪</span> scenario</a>
+        <nav class="nav-pills">
+          <a class="nav-pill" onclick="goTo('results')">← Retour aux résultats</a>
+        </nav>
+        <div class="header-right">
+          <a class="header-link">♡ Sauvegarder</a>
+          <a class="header-link">↗ Partager</a>
+        </div>
+      </header>
+
+      <div class="profile-wrap">
+        <h1 class="profile-title">Élise Marceau · Chanteuse pour vos événements</h1>
+        <p class="profile-subtitle">
+          <span class="star">★</span> <strong>4,9</strong> · <a style="text-decoration: underline;">47 avis</a>
+          <span class="dot-sep">·</span> <span style="text-decoration: underline;">Profil vérifié</span>
+          <span class="dot-sep">·</span> Paris 11ᵉ
+        </p>
+
+        <div class="gallery">
+          <div class="g1"></div>
+          <div class="g2"></div>
+          <div class="g3"></div>
+          <div class="g4"></div>
+          <div class="g5">
+            <div class="gallery-show-all">▤ Toutes les photos</div>
+          </div>
+        </div>
+
+        <div class="profile-body">
+          <div>
+            <div class="verified-row">
+              <div class="verified-icon">EM</div>
+              <div class="verified-text">
+                <strong>Hôte vérifié · Élise est intermittente du spectacle</strong>
+                <span class="sub">Statut juridique vérifié auprès de Pôle Emploi spectacle · Sur Scenario depuis octobre 2025</span>
+              </div>
+            </div>
+
+            <div class="profile-section">
+              <h2>Présentation</h2>
+              <p>Chanteuse professionnelle depuis 12 ans, j'accompagne vos événements (mariages, anniversaires, soirées d'entreprise) avec un répertoire de variété française, de standards jazz et de chansons internationales. Je me déplace en solo (voix + piano), en duo (avec guitariste) ou en trio.</p>
+              <p>J'apporte mon matériel sonorisation pour des prestations en intérieur jusqu'à 80 personnes. Pour des configurations plus importantes, je travaille avec un technicien partenaire.</p>
+            </div>
+
+            <div class="profile-section">
+              <h2>Ce qui est inclus</h2>
+              <div class="tag-row">
+                <span class="tag">🎤 Sonorisation incluse jusqu'à 80 pers.</span>
+                <span class="tag">⏱ 2h de prestation</span>
+                <span class="tag">📍 Île-de-France</span>
+                <span class="tag">🎹 Piano numérique</span>
+                <span class="tag">🚗 Déplacement inclus -50 km</span>
+                <span class="tag">📋 Déclaration GUSO incluse</span>
+              </div>
+            </div>
+
+            <div class="profile-section">
+              <h2>Répertoire</h2>
+              <div class="tag-row">
+                <span class="tag">Aznavour</span><span class="tag">Brel</span><span class="tag">Piaf</span>
+                <span class="tag">Norah Jones</span><span class="tag">Diana Krall</span>
+                <span class="tag">Stromae</span><span class="tag">Claudio Capéo</span>
+                <span class="tag">+ 38 autres titres</span>
+              </div>
+            </div>
+
+            <div class="profile-section">
+              <h2>Conditions et logistique</h2>
+              <p>Devis personnalisé sous 48h. Acompte de 30 % à la signature, solde libéré à l'artiste 24h après la prestation (séquestre Mangopay). Annulation gratuite jusqu'à J-15.</p>
+              <div class="guso-callout">
+                <h4>📋 Déclaration GUSO incluse</h4>
+                <p>Élise est intermittente du spectacle. La déclaration GUSO obligatoire sera <strong>automatiquement pré-remplie</strong> à partir de votre réservation. Coût : 25 € forfaitaires inclus dans la facture finale.</p>
+              </div>
+            </div>
+
+            <div class="profile-section">
+              <div class="reviews-summary">
+                <div class="reviews-num"><span class="star">★</span> 4,9</div>
+                <div>
+                  <div style="font-weight: 600; font-size: 16px;">47 avis</div>
+                  <div style="font-size: 14px; color: var(--ink-soft);">Tous laissés par des clients qui ont réellement réservé.</div>
+                </div>
+              </div>
+              <div class="review">
+                <div class="review-head">
+                  <div class="review-avatar">CD</div>
+                  <div>
+                    <div class="review-author">Camille D.</div>
+                    <div class="review-date">Il y a 3 semaines · Anniversaire</div>
+                  </div>
+                </div>
+                <div class="review-stars">★ ★ ★ ★ ★</div>
+                <p class="review-text">Élise a illuminé l'anniversaire de ma mère. Voix superbe, présence, et un vrai sens du contact avec le public. La gestion administrative a été d'une simplicité rare. Mille mercis !</p>
+              </div>
+              <div class="review">
+                <div class="review-head">
+                  <div class="review-avatar" style="background: linear-gradient(135deg, #00A699, #006A65);">JR</div>
+                  <div>
+                    <div class="review-author">Julien R.</div>
+                    <div class="review-date">Il y a 1 mois · Mariage</div>
+                  </div>
+                </div>
+                <div class="review-stars">★ ★ ★ ★ ★</div>
+                <p class="review-text">Animation du vin d'honneur impeccable. Ponctuelle, professionnelle, attentive aux demandes. Notre famille en parle encore. Recommandée à 100 %.</p>
+              </div>
+              <div class="review">
+                <div class="review-head">
+                  <div class="review-avatar" style="background: linear-gradient(135deg, #6B47DC, #3B2680);">ML</div>
+                  <div>
+                    <div class="review-author">Marie L.</div>
+                    <div class="review-date">Il y a 2 mois · Cocktail privé</div>
+                  </div>
+                </div>
+                <div class="review-stars">★ ★ ★ ★ ☆</div>
+                <p class="review-text">Très bonne prestation, ambiance feutrée parfaite pour un cocktail. Petit bémol : a démarré 15 minutes en retard à cause du trafic.</p>
+              </div>
+              <button class="btn btn-ghost btn-sm" style="margin-top: 12px;">Voir les 47 avis</button>
+            </div>
+          </div>
+
+          <aside>
+            <div class="booking-widget">
+              <div class="booking-price">
+                <span class="amount">650 €</span><span class="unit">/ 2h en solo</span>
+              </div>
+              <div class="booking-form">
+                <div class="bf-row">
+                  <div class="bf-cell"><div class="lbl">Date</div><div class="val">15 juin 2026</div></div>
+                  <div class="bf-cell"><div class="lbl">Format</div><div class="val">Solo (voix + piano)</div></div>
+                </div>
+                <div class="bf-cell full"><div class="lbl">Invités</div><div class="val">40 personnes</div></div>
+              </div>
+              <button class="btn btn-primary btn-block btn-lg" onclick="goTo('quote')">Demander un devis</button>
+              <div class="booking-disclaimer">Vous ne payez rien à cette étape</div>
+              <div class="price-breakdown">
+                <div class="price-row under"><span>650 € × 1 prestation</span><span>650 €</span></div>
+                <div class="price-row under"><span>Frais de service Scenario</span><span>32 €</span></div>
+                <div class="price-row under"><span>Service GUSO</span><span>25 €</span></div>
+                <div class="price-row total"><span>Total estimatif</span><span>707 €</span></div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ÉCRAN 4 : DEMANDE DE DEVIS ============== -->
+<section class="screen" id="screen-quote">
+  <div class="screen-label">
+    <span class="screen-label-num">4 / 7</span>
+    <div>
+      <div class="screen-label-title">Demande de devis</div>
+      <div class="screen-label-desc">Stepper en haut, formulaire en blocs séparés, récapitulatif sticky à droite.</div>
+    </div>
+  </div>
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <div class="url">scenario.fr/devis/nouveau?artiste=elise-marceau</div>
+    </div>
+    <div class="browser-content">
+      <header class="app-header">
+        <a class="logo" onclick="goTo('home')"><span class="logo-icon">♪</span> scenario</a>
+        <span style="font-size: 13px; color: var(--ink-soft);">Vos données sont sécurisées</span>
+      </header>
+
+      <div class="stepper">
+        <div class="step active"><div class="step-num">1</div><div>Demande de devis</div></div>
+        <div class="step-bar"></div>
+        <div class="step"><div class="step-num">2</div><div>Réponse de l'artiste</div></div>
+        <div class="step-bar"></div>
+        <div class="step"><div class="step-num">3</div><div>Paiement</div></div>
+        <div class="step-bar"></div>
+        <div class="step"><div class="step-num">4</div><div>Prestation</div></div>
+      </div>
+
+      <div class="form-page-wrap">
+        <div>
+          <h1 style="font-size: 28px; font-weight: 700; margin: 0 0 6px 0; letter-spacing: -.01em;">Détaillez votre événement</h1>
+          <p style="color: var(--ink-soft); margin: 0 0 24px 0;">Plus c'est précis, mieux Élise pourra vous proposer un devis adapté.</p>
+
+          <div class="form-block">
+            <h3>Type d'événement</h3>
+            <p class="block-sub">Pour qu'Élise adapte son répertoire et sa présence</p>
+            <div class="form-row">
+              <select>
+                <option>🎂 Anniversaire (60 ans)</option>
+                <option>💍 Mariage</option>
+                <option>🥂 Cocktail privé</option>
+                <option>🏢 Événement d'entreprise</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-block">
+            <h3>Quand et où</h3>
+            <p class="block-sub">Date, créneau et adresse précise</p>
+            <div class="form-grid-2">
+              <div class="form-row"><label>Date</label><input type="text" value="15 juin 2026"></div>
+              <div class="form-row"><label>Horaire de prestation</label><input type="text" value="20h00 → 22h00"></div>
+            </div>
+            <div class="form-row"><label>Adresse exacte</label><input type="text" value="42 rue des Lilas, 75019 Paris"></div>
+          </div>
+
+          <div class="form-block">
+            <h3>Format et budget</h3>
+            <p class="block-sub">Vous avez le choix de la formule</p>
+            <div class="form-grid-2">
+              <div class="form-row"><label>Format souhaité</label>
+                <select><option>Solo (voix + piano)</option><option>Duo</option><option>Trio</option></select>
+              </div>
+              <div class="form-row"><label>Nombre d'invités</label><input type="text" value="40"></div>
+            </div>
+            <div class="form-row"><label>Budget indicatif</label><input type="text" value="700 € à 900 €"></div>
+          </div>
+
+          <div class="form-block">
+            <h3>Détails complémentaires</h3>
+            <p class="block-sub">Optionnel · ce qui aiderait Élise à vous proposer la meilleure prestation</p>
+            <div class="form-row">
+              <textarea>Anniversaire des 60 ans de ma mère. Elle adore Aznavour, Brel, et la chanson française des années 70. Cadre intimiste à la maison, salon de 50 m². Repère sonore : pas de batterie, juste voix + accompagnement doux.</textarea>
+            </div>
+            <div class="guso-callout">
+              <h4>📋 Statut juridique de la prestation</h4>
+              <p>Élise étant intermittente du spectacle, votre prestation devra être déclarée au <strong>GUSO (URSSAF)</strong>. Notre service prend cette déclaration en charge pour vous (25 € forfaitaires, ajoutés au devis final).</p>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; margin-top: 24px;">
+            <button class="btn btn-ghost">← Annuler</button>
+            <button class="btn btn-primary btn-lg" onclick="goTo('checkout')">Envoyer la demande</button>
+          </div>
+        </div>
+
+        <aside>
+          <div class="summary-card">
+            <h3>Récapitulatif</h3>
+            <div class="summary-artist">
+              <div class="summary-artist-photo"></div>
+              <div class="summary-artist-info">
+                <div class="name">Élise Marceau</div>
+                <div class="type">Chanteuse</div>
+                <div class="rating"><span class="star">★</span> 4,9 · 47 avis</div>
+              </div>
+            </div>
+            <div class="summary-meta">
+              <div class="summary-row label-only">Tarif indicatif</div>
+              <div class="summary-row" style="font-weight: 600;"><span>À partir de</span><span>650 €</span></div>
+              <div class="summary-row label-only" style="margin-top: 8px;">Réponse moyenne</div>
+              <div class="summary-row" style="font-weight: 600;"><span>Sous</span><span>6 heures</span></div>
+            </div>
+            <div class="annotation" style="margin-top: 20px;">
+              <strong>Note PO :</strong> aucun paiement à cette étape. Différenciateur par rapport à certains concurrents qui demandent une carte d'entrée pour contacter l'artiste.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ÉCRAN 5 : CHECKOUT + GUSO ============== -->
+<section class="screen" id="screen-checkout">
+  <div class="screen-label">
+    <span class="screen-label-num">5 / 7</span>
+    <div>
+      <div class="screen-label-title">Confirmation, paiement &amp; déclaration GUSO</div>
+      <div class="screen-label-desc">Étape clé : transparence des frais, opt-in GUSO recommandé, paiement Mangopay.</div>
+    </div>
+  </div>
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <div class="url">scenario.fr/devis/r-2026-06-15-em/checkout</div>
+    </div>
+    <div class="browser-content">
+      <header class="app-header">
+        <a class="logo" onclick="goTo('home')"><span class="logo-icon">♪</span> scenario</a>
+        <span style="font-size: 13px; color: var(--ink-soft);">🔒 Paiement sécurisé Mangopay</span>
+      </header>
+
+      <div class="stepper">
+        <div class="step done"><div class="step-num">✓</div><div>Demande</div></div>
+        <div class="step-bar"></div>
+        <div class="step done"><div class="step-num">✓</div><div>Devis reçu</div></div>
+        <div class="step-bar"></div>
+        <div class="step active"><div class="step-num">3</div><div>Paiement &amp; signature</div></div>
+        <div class="step-bar"></div>
+        <div class="step"><div class="step-num">4</div><div>Prestation</div></div>
+      </div>
+
+      <div class="form-page-wrap">
+        <div>
+          <h1 style="font-size: 28px; font-weight: 700; margin: 0 0 6px 0; letter-spacing: -.01em;">Confirmez votre réservation</h1>
+          <p style="color: var(--ink-soft); margin: 0 0 24px 0;">Acompte de 30 % maintenant, solde libéré à l'artiste 24h après la prestation.</p>
+
+          <div class="form-block">
+            <h3>Service GUSO</h3>
+            <p class="block-sub">Déclaration URSSAF obligatoire pour les prestations chez un particulier</p>
+            <label class="check-row">
+              <input type="checkbox" checked>
+              <div class="check-text">
+                <strong>Inclure la déclaration GUSO — 25 €</strong>
+                <span class="sub">Nous nous occupons de la déclaration auprès de l'URSSAF, du calcul des cotisations sociales et de la génération du contrat. Vous n'avez qu'à signer.</span>
+              </div>
+            </label>
+            <div class="annotation" style="margin-top: 8px;">
+              <strong>⚠ Recommandé :</strong> pour une prestation chez un particulier, la déclaration GUSO est légalement <strong>obligatoire</strong>. Si vous décochez, vous devrez la faire vous-même sur guso.fr sous 5 jours.
+            </div>
+          </div>
+
+          <div class="form-block">
+            <h3>Méthode de paiement</h3>
+            <p class="block-sub">CB sécurisée · 3DSecure</p>
+            <div class="form-grid-2">
+              <div class="form-row"><label>Numéro de carte</label><input type="text" value="•••• •••• •••• 4242"></div>
+              <div class="form-row"><label>Expiration / CVC</label><input type="text" value="08/28 — •••"></div>
+            </div>
+            <div class="form-row"><label>Adresse de facturation</label><input type="text" value="42 rue des Lilas, 75019 Paris"></div>
+          </div>
+
+          <div class="form-block">
+            <h3>Conditions</h3>
+            <label class="check-row">
+              <input type="checkbox" checked>
+              <div class="check-text">J'accepte les <a style="text-decoration: underline; color: var(--rausch);">conditions générales de réservation</a> et le <a style="text-decoration: underline; color: var(--rausch);">contrat de prestation</a> signé électroniquement (signature simple).</div>
+            </label>
+            <label class="check-row">
+              <input type="checkbox">
+              <div class="check-text">J'accepte de recevoir des recommandations d'artistes par email pour mes prochains événements.</div>
+            </label>
+          </div>
+
+          <button class="btn btn-primary btn-lg btn-block" style="margin-top: 16px;">Confirmer et payer 259,50 €</button>
+          <p style="text-align: center; font-size: 13px; color: var(--ink-soft); margin-top: 12px;">Vous serez débité de l'acompte uniquement. Le solde sera libéré 24h après la prestation.</p>
+        </div>
+
+        <aside>
+          <div class="summary-card">
+            <h3>Récapitulatif</h3>
+            <div class="summary-artist">
+              <div class="summary-artist-photo"></div>
+              <div class="summary-artist-info">
+                <div class="name">Élise Marceau</div>
+                <div class="type">Solo voix + piano</div>
+                <div class="rating">15 juin · 20h-22h</div>
+              </div>
+            </div>
+            <div class="summary-meta">
+              <div class="summary-row"><span>Prestation artistique</span><span>800,00 €</span></div>
+              <div class="summary-row"><span>Frais de service Scenario (5 %)</span><span>40,00 €</span></div>
+              <div class="summary-row"><span>Service GUSO inclus</span><span>25,00 €</span></div>
+              <div class="summary-row label-only"><span>dont cotisations sociales (~23 %)</span><span>~ 184 €</span></div>
+            </div>
+            <div class="summary-row total"><span>Total à payer</span><span>865,00 €</span></div>
+            <div class="summary-row" style="color: var(--ink-soft); font-size: 13px; padding-top: 4px;"><span>Acompte aujourd'hui (30 %)</span><span>259,50 €</span></div>
+
+            <div class="annotation" style="margin-top: 16px;">
+              <strong>Note PO :</strong> transparence totale sur la décomposition (style Airbnb). Le client comprend exactement où va son argent — gros levier de confiance.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ÉCRAN 6 : PRICING ============== -->
+<section class="screen" id="screen-pricing">
+  <div class="screen-label">
+    <span class="screen-label-num">6 / 7</span>
+    <div>
+      <div class="screen-label-title">Page d'abonnements artistes</div>
+      <div class="screen-label-desc">3 paliers Free / Pro / Premium. Pour la V1, démarrer avec Free + Pro uniquement.</div>
+    </div>
+  </div>
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <div class="url">scenario.fr/artistes/abonnements</div>
+    </div>
+    <div class="browser-content">
+      <header class="app-header">
+        <a class="logo"><span class="logo-icon">♪</span> scenario</a>
+        <nav class="nav-pills">
+          <a class="nav-pill">Espace artiste</a>
+          <a class="nav-pill active">Abonnements</a>
+        </nav>
+        <div class="header-right">
+          <a class="user-pill"><span style="font-size: 16px;">☰</span><span class="user-icon">EM</span></a>
+        </div>
+      </header>
+      <div class="pricing-section">
+        <h1>Choisissez votre formule</h1>
+        <p class="sub">Sans engagement, modifiable à tout moment. Tous les paliers donnent accès à la plateforme.</p>
+
+        <div class="tier-grid">
+          <div class="tier-card">
+            <div class="tier-name">Free</div>
+            <div class="tier-price"><span class="amount">0 €</span><span class="period">/ mois</span></div>
+            <div class="tier-tag">Pour découvrir Scenario</div>
+            <ul class="tier-features">
+              <li><span class="check">✓</span> Profil public basique (5 photos)</li>
+              <li><span class="check">✓</span> Jusqu'à <strong>5 demandes de devis / mois</strong></li>
+              <li><span class="check">✓</span> Messagerie intégrée</li>
+              <li><span class="check">✓</span> Paiement sécurisé Mangopay</li>
+              <li><span class="check">✓</span> Lien vers ressources GUSO</li>
+              <li class="dim"><span class="dash">—</span> Commission plateforme : <strong>15 %</strong></li>
+              <li class="dim"><span class="dash">—</span> Aucune mise en avant</li>
+            </ul>
+            <button class="btn btn-ghost">Commencer gratuitement</button>
+          </div>
+
+          <div class="tier-card popular">
+            <div class="popular-badge">Le plus populaire</div>
+            <div class="tier-name">Pro</div>
+            <div class="tier-price"><span class="amount">19 €</span><span class="period">/ mois</span></div>
+            <div class="tier-tag">Pour les artistes actifs</div>
+            <ul class="tier-features">
+              <li><span class="check">✓</span> Profil enrichi (vidéos, audios, calendrier)</li>
+              <li><span class="check">✓</span> <strong>Demandes de devis illimitées</strong></li>
+              <li><span class="check">✓</span> Visibilité boostée dans les résultats (×1,5)</li>
+              <li><span class="check">✓</span> Badge "Pro" sur le profil</li>
+              <li><span class="check">✓</span> Pré-remplissage formulaire GUSO</li>
+              <li><span class="check">✓</span> Commission plateforme : <strong>10 %</strong></li>
+              <li><span class="check">✓</span> Support email J+2</li>
+            </ul>
+            <button class="btn btn-primary">Démarrer Pro</button>
+          </div>
+
+          <div class="tier-card">
+            <div class="tier-name">Premium</div>
+            <div class="tier-price"><span class="amount">49 €</span><span class="period">/ mois</span></div>
+            <div class="tier-tag">Pour les pros à plein temps</div>
+            <ul class="tier-features">
+              <li><span class="check">✓</span> Page personnalisée, médias illimités</li>
+              <li><span class="check">✓</span> Demandes de devis illimitées</li>
+              <li><span class="check">✓</span> <strong>Top of search</strong> en rotation</li>
+              <li><span class="check">✓</span> Badge ★ Premium</li>
+              <li><span class="check">✓</span> <strong>Service GUSO complet</strong> (partenaire RH)</li>
+              <li><span class="check">✓</span> Commission plateforme : <strong>7 %</strong></li>
+              <li><span class="check">✓</span> Chat prioritaire J+1, statistiques avancées</li>
+            </ul>
+            <button class="btn btn-dark">Demander Premium</button>
+          </div>
+        </div>
+        <div class="annotation" style="max-width: 1100px; margin: 32px auto 0;">
+          <strong>Note PO :</strong> au lancement, le palier Premium peut être masqué et activé en bêta sur 3 à 5 artistes pour valider la promesse de valeur (notamment le service GUSO complet). À ouvrir publiquement à M+6.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ÉCRAN 7 : DASHBOARD ARTISTE ============== -->
+<section class="screen" id="screen-dashboard">
+  <div class="screen-label">
+    <span class="screen-label-num">7 / 7</span>
+    <div>
+      <div class="screen-label-title">Dashboard artiste</div>
+      <div class="screen-label-desc">Vue de gestion : KPIs, demandes en attente, statut GUSO du mois.</div>
+    </div>
+  </div>
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <div class="url">scenario.fr/espace-artiste</div>
+    </div>
+    <div class="browser-content">
+      <header class="app-header">
+        <a class="logo" onclick="goTo('home')"><span class="logo-icon">♪</span> scenario</a>
+        <nav class="nav-pills">
+          <a class="nav-pill active">Tableau de bord</a>
+          <a class="nav-pill">Mon profil</a>
+          <a class="nav-pill">Demandes</a>
+          <a class="nav-pill">Planning</a>
+          <a class="nav-pill">Revenus</a>
+        </nav>
+        <div class="header-right">
+          <a class="header-link" style="background: rgba(255,56,92,.08); color: var(--rausch);">★ Pro</a>
+          <a class="user-pill"><span style="font-size: 16px;">☰</span><span class="user-icon">EM</span></a>
+        </div>
+      </header>
+
+      <div class="dashboard-wrap">
+        <div class="dashboard-header">
+          <div class="dashboard-greeting">
+            <h1>Bonjour Élise 👋</h1>
+            <p>3 demandes en attente · 2 prestations cette semaine</p>
+          </div>
+          <button class="btn btn-dark btn-sm">+ Nouvelle disponibilité</button>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Demandes en attente</div>
+            <div class="kpi-value alert">3</div>
+            <div class="kpi-sub">Délai de réponse moyen 6h</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Prestations confirmées</div>
+            <div class="kpi-value">7</div>
+            <div class="kpi-sub">ce mois-ci</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Revenus du mois</div>
+            <div class="kpi-value success">5 240 €</div>
+            <div class="kpi-sub">net après commission</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Note moyenne</div>
+            <div class="kpi-value"><span class="star">★</span> 4,9</div>
+            <div class="kpi-sub">47 avis</div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="dashboard-card">
+            <h3>Demandes en attente</h3>
+            <div class="request-row">
+              <div class="request-info">
+                <div class="request-title">Camille D. — Anniversaire 60 ans</div>
+                <div class="request-detail">15 juin 2026 · Paris 19ᵉ · 40 invités · Budget 700-900 €</div>
+              </div>
+              <div class="request-actions">
+                <button class="btn btn-ghost btn-sm">Refuser</button>
+                <button class="btn btn-primary btn-sm">Proposer un devis</button>
+              </div>
+            </div>
+            <div class="request-row">
+              <div class="request-info">
+                <div class="request-title">Mathilde V. — Mariage</div>
+                <div class="request-detail">12 septembre 2026 · Versailles · 120 invités · Vin d'honneur 1h30</div>
+              </div>
+              <div class="request-actions">
+                <button class="btn btn-ghost btn-sm">Refuser</button>
+                <button class="btn btn-primary btn-sm">Proposer un devis</button>
+              </div>
+            </div>
+            <div class="request-row">
+              <div class="request-info">
+                <div class="request-title">Yann B. — Cocktail entreprise</div>
+                <div class="request-detail">28 mai 2026 · La Défense · 60 personnes · Format duo</div>
+              </div>
+              <div class="request-actions">
+                <button class="btn btn-ghost btn-sm">Refuser</button>
+                <button class="btn btn-primary btn-sm">Proposer un devis</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-card">
+            <h3>Statut GUSO du mois</h3>
+            <div class="summary-row"><span style="color: var(--ink-soft);">Prestations déclarées</span><span style="font-weight: 600;">5 / 6</span></div>
+            <div class="summary-row"><span style="color: var(--ink-soft);">Cotisations cumulées</span><span style="font-weight: 600;">1 240 €</span></div>
+            <div class="summary-row"><span style="color: var(--ink-soft);">Heures intermittence</span><span style="font-weight: 600;">42 h</span></div>
+            <div class="annotation" style="margin-top: 16px;">
+              <strong>⚠ Attention :</strong> à 6 représentations / an, le particulier organisateur doit obtenir une licence d'entrepreneur de spectacles. À rappeler dans les devis suivants.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+  function goTo(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    document.querySelectorAll('#screen-nav a').forEach(a => {
+      a.classList.toggle('active', a.dataset.screen === id);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  document.querySelectorAll('#screen-nav a').forEach(a => {
+    a.addEventListener('click', () => goTo(a.dataset.screen));
+  });
+</script>
+
+</body>
+</html>

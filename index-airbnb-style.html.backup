@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scenario — L'artiste qui rendra votre événement inoubliable</title>
+<meta name="description" content="Scenario met en relation les particuliers et les artistes du spectacle vivant pour des événements privés mémorables. Musique, théâtre, magie. Conformité GUSO incluse." />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Scenario — L'artiste qui rendra votre événement inoubliable" />
+<meta property="og:description" content="La plateforme française pour réserver un musicien, chanteur, comédien ou magicien pour vos événements privés. Sereinement. Légalement." />
+<meta property="og:locale" content="fr_FR" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --rausch: #FF385C;
+    --rausch-dark: #E00B41;
+    --rausch-darker: #BD1E59;
+    --gradient-cta: linear-gradient(135deg, #E61E4D 0%, #D70466 50%, #BD1E59 100%);
+    --gradient-cta-hover: linear-gradient(135deg, #BD1E59 0%, #BD1E59 100%);
+
+    --babu: #00A699;
+    --arches: #FC642D;
+
+    --ink: #222222;
+    --ink-soft: #717171;
+    --ink-light: #B0B0B0;
+
+    --bg: #FFFFFF;
+    --bg-soft: #F7F7F7;
+    --line: #EBEBEB;
+    --line-light: #F0F0F0;
+
+    --shadow-card: 0 6px 16px rgba(0,0,0,.12);
+    --shadow-soft: 0 2px 8px rgba(0,0,0,.06);
+    --shadow-search: 0 1px 2px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.08);
+
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 999px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--ink);
+    background: white;
+    -webkit-font-smoothing: antialiased;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  a { color: inherit; text-decoration: none; cursor: pointer; }
+  button { font-family: inherit; cursor: pointer; }
+  img { max-width: 100%; }
+
+  /* ========== HEADER ========== */
+  .header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .header-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 18px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 6px;
+    font-weight: 800; font-size: 22px; color: var(--rausch);
+    letter-spacing: -.02em;
+  }
+  .logo-icon { font-size: 26px; }
+
+  .nav-links {
+    display: none; gap: 28px;
+  }
+  @media (min-width: 768px) {
+    .nav-links { display: flex; }
+  }
+  .nav-link {
+    font-size: 14px; font-weight: 500; color: var(--ink);
+    padding: 8px 0; transition: color .15s;
+  }
+  .nav-link:hover { color: var(--rausch); }
+
+  .header-cta {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: var(--radius-sm);
+    font-size: 15px; font-weight: 600; border: none;
+    transition: all .15s; white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--gradient-cta); color: white;
+  }
+  .btn-primary:hover { background: var(--gradient-cta-hover); transform: translateY(-1px); }
+  .btn-dark { background: var(--ink); color: white; }
+  .btn-dark:hover { background: #000; }
+  .btn-ghost {
+    background: white; color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  .btn-ghost:hover { background: var(--bg-soft); }
+  .btn-light {
+    background: white; color: var(--ink);
+    border: 1px solid var(--line); box-shadow: var(--shadow-soft);
+  }
+  .btn-light:hover { box-shadow: var(--shadow-card); }
+  .btn-sm { padding: 9px 16px; font-size: 14px; }
+  .btn-lg { padding: 16px 32px; font-size: 16px; }
+  .btn-block { width: 100%; justify-content: center; }
+
+  /* ========== HERO ========== */
+  .hero {
+    background: linear-gradient(180deg, #FFFAFB 0%, #FFF5F7 100%);
+    padding: 80px 32px 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before, .hero::after {
+    content: ''; position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%; opacity: .15;
+    pointer-events: none;
+  }
+  .hero::before {
+    background: radial-gradient(circle, var(--rausch), transparent 70%);
+    top: -200px; left: -200px;
+  }
+  .hero::after {
+    background: radial-gradient(circle, var(--arches), transparent 70%);
+    bottom: -300px; right: -200px;
+  }
+  .hero-inner { max-width: 920px; margin: 0 auto; position: relative; z-index: 1; }
+  .eyebrow {
+    display: inline-block;
+    background: rgba(255,56,92,.1); color: var(--rausch);
+    padding: 6px 14px; border-radius: var(--radius-full);
+    font-size: 13px; font-weight: 600;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 44px; font-weight: 800; line-height: 1.05;
+    margin: 0 0 24px 0; letter-spacing: -.025em;
+  }
+  @media (min-width: 768px) {
+    .hero h1 { font-size: 64px; }
+  }
+  .hero h1 .accent {
+    background: var(--gradient-cta);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 18px; color: var(--ink-soft);
+    max-width: 640px; margin: 0 auto 40px auto;
+    line-height: 1.5;
+  }
+  .hero-ctas {
+    display: flex; flex-direction: column; gap: 12px;
+    justify-content: center; align-items: center;
+  }
+  @media (min-width: 640px) {
+    .hero-ctas { flex-direction: row; }
+  }
+  .demo-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 20px;
+    color: var(--ink-soft); font-size: 14px; font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color .15s;
+  }
+  .demo-link:hover { color: var(--rausch); }
+
+  /* ========== TRUST STRIP ========== */
+  .trust {
+    background: white;
+    padding: 40px 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .trust-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    text-align: center;
+  }
+  @media (min-width: 768px) {
+    .trust-inner { grid-template-columns: repeat(4, 1fr); gap: 48px; }
+  }
+  .trust-num {
+    font-size: 32px; font-weight: 800; color: var(--ink);
+    letter-spacing: -.02em;
+  }
+  .trust-lbl {
+    font-size: 13px; color: var(--ink-soft);
+    margin-top: 4px; font-weight: 500;
+  }
+
+  /* ========== SECTIONS ========== */
+  section {
+    padding: 80px 32px;
+  }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-head {
+    text-align: center; max-width: 720px;
+    margin: 0 auto 56px auto;
+  }
+  .section-eyebrow {
+    display: inline-block;
+    color: var(--rausch); font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: 36px; font-weight: 800; line-height: 1.1;
+    letter-spacing: -.02em; margin: 0 0 16px 0;
+  }
+  @media (min-width: 768px) {
+    .section-title { font-size: 44px; }
+  }
+  .section-sub {
+    font-size: 17px; color: var(--ink-soft);
+    margin: 0; line-height: 1.5;
+  }
+
+  /* ========== USP CARDS ========== */
+  .usp-bg { background: var(--bg-soft); }
+  .usp-grid {
+    display: grid; gap: 16px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .usp-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .usp-card {
+    background: white; padding: 32px;
+    border-radius: var(--radius-lg);
+    transition: all .2s;
+  }
+  .usp-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+  }
+  .usp-card.featured {
+    background: linear-gradient(135deg, #FFF8F9 0%, #FFE5EB 100%);
+    border: 2px solid var(--rausch);
+  }
+  .usp-icon-wrap {
+    width: 56px; height: 56px; border-radius: var(--radius);
+    background: var(--bg-soft);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; font-size: 26px;
+  }
+  .usp-card.featured .usp-icon-wrap {
+    background: var(--rausch); color: white;
+  }
+  .usp-badge {
+    display: inline-block; padding: 4px 10px;
+    background: var(--rausch); color: white;
+    font-size: 11px; font-weight: 700;
+    border-radius: var(--radius-full);
+    margin-bottom: 12px;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .usp-card h3 {
+    font-size: 20px; font-weight: 700;
+    margin: 0 0 8px 0; letter-spacing: -.01em;
+  }
+  .usp-card p {
+    font-size: 15px; color: var(--ink-soft);
+    line-height: 1.5; margin: 0;
+  }
+
+  /* ========== STEPS ========== */
+  .steps-grid {
+    display: grid; gap: 32px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .steps-grid { grid-template-columns: repeat(3, 1fr); gap: 48px; }
+  }
+  .step {
+    text-align: left;
+  }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--gradient-cta); color: white;
+    font-size: 20px; font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: -.02em;
+  }
+  .step h3 {
+    font-size: 20px; font-weight: 700;
+    margin: 0 0 12px 0; letter-spacing: -.01em;
+  }
+  .step p {
+    font-size: 15px; color: var(--ink-soft);
+    line-height: 1.5; margin: 0;
+  }
+
+  /* ========== PREVIEW SECTION ========== */
+  .preview-bg {
+    background: linear-gradient(180deg, #FFF8F9 0%, white 100%);
+  }
+  .preview-frame {
+    max-width: 1100px; margin: 0 auto;
+    background: white;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: 0 32px 64px rgba(0,0,0,.12);
+    border: 1px solid var(--line);
+    position: relative;
+  }
+  .preview-bar {
+    background: #F7F7F7; padding: 12px 16px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #FF5F57; } .dot-y { background: #FEBC2E; } .dot-g { background: #28C840; }
+  .preview-url {
+    flex: 1; background: white; border: 1px solid var(--line);
+    padding: 6px 14px; border-radius: var(--radius-full);
+    font-size: 12px; color: var(--ink-soft);
+    margin-left: 12px;
+  }
+  .preview-iframe-wrap {
+    position: relative;
+    height: 520px;
+    overflow: hidden;
+  }
+  .preview-iframe {
+    width: 100%; height: 100%;
+    border: none;
+    transform-origin: top left;
+  }
+  .preview-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 60%, rgba(255,255,255,.95) 100%);
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 40px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .preview-cta {
+    pointer-events: auto;
+  }
+
+  /* ========== FORM SECTIONS ========== */
+  .form-section {
+    background: white;
+  }
+  .form-section.alt { background: var(--bg-soft); }
+  .form-grid {
+    display: grid; gap: 56px;
+    grid-template-columns: 1fr;
+    max-width: 1200px; margin: 0 auto;
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .form-grid { grid-template-columns: 1fr 1fr; gap: 80px; }
+  }
+  .form-text h2 {
+    font-size: 32px; font-weight: 800;
+    letter-spacing: -.02em;
+    margin: 16px 0;
+  }
+  @media (min-width: 768px) {
+    .form-text h2 { font-size: 40px; }
+  }
+  .form-text p {
+    font-size: 17px; color: var(--ink-soft);
+    line-height: 1.5; margin: 0 0 24px 0;
+  }
+  .form-text ul {
+    list-style: none; padding: 0; margin: 0;
+  }
+  .form-text li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0; font-size: 15px;
+  }
+  .form-text li::before {
+    content: '✓'; color: var(--rausch); font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .form-card {
+    background: white; padding: 32px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-soft);
+  }
+  .form-card h3 {
+    font-size: 20px; font-weight: 700;
+    margin: 0 0 6px 0;
+  }
+  .form-card .card-sub {
+    font-size: 14px; color: var(--ink-soft);
+    margin: 0 0 24px 0;
+  }
+  .form-row { margin-bottom: 16px; }
+  .form-row label {
+    display: block; font-size: 13px; font-weight: 600;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .form-row input, .form-row textarea, .form-row select {
+    width: 100%; padding: 13px 16px;
+    border: 1px solid var(--line); border-radius: var(--radius-sm);
+    font-size: 15px; font-family: inherit; color: var(--ink);
+    background: white;
+    transition: border-color .15s;
+  }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus {
+    outline: none; border-color: var(--ink);
+  }
+  .form-row textarea { min-height: 100px; resize: vertical; }
+  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) {
+    .form-grid-2 { grid-template-columns: 1fr; }
+  }
+  .form-disclaimer {
+    font-size: 12px; color: var(--ink-soft);
+    margin-top: 12px; line-height: 1.5;
+  }
+
+  /* ========== FAQ ========== */
+  .faq-bg { background: white; }
+  .faq-list {
+    max-width: 760px; margin: 0 auto;
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--line);
+    padding: 24px 0;
+  }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 17px; font-weight: 600;
+    cursor: pointer; user-select: none;
+    list-style: none;
+  }
+  .faq-q::-webkit-details-marker { display: none; }
+  .faq-q::after {
+    content: '+'; font-size: 24px; font-weight: 400;
+    color: var(--ink-soft); transition: transform .2s;
+  }
+  details[open] .faq-q::after { transform: rotate(45deg); }
+  .faq-a {
+    font-size: 15px; color: var(--ink-soft);
+    line-height: 1.6; margin: 12px 0 0 0; padding-right: 32px;
+  }
+
+  /* ========== FOOTER ========== */
+  footer {
+    background: var(--bg-soft);
+    padding: 56px 32px 32px;
+    border-top: 1px solid var(--line);
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+  }
+  .footer-cols {
+    display: grid; gap: 32px;
+    grid-template-columns: 1fr;
+    margin-bottom: 32px;
+  }
+  @media (min-width: 768px) {
+    .footer-cols { grid-template-columns: 2fr 1fr 1fr 1fr; }
+  }
+  footer h4 {
+    font-size: 14px; font-weight: 700;
+    margin: 0 0 16px 0; color: var(--ink);
+  }
+  footer ul { list-style: none; padding: 0; margin: 0; }
+  footer li {
+    font-size: 14px; color: var(--ink-soft);
+    padding: 6px 0;
+  }
+  footer li a:hover { color: var(--ink); }
+  .footer-brand {
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.6; margin-top: 12px;
+  }
+  .footer-bottom {
+    padding-top: 24px; border-top: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 8px;
+    font-size: 13px; color: var(--ink-soft);
+  }
+  @media (min-width: 600px) {
+    .footer-bottom { flex-direction: row; justify-content: space-between; }
+  }
+
+  /* ========== UTIL ========== */
+  .gradient-text {
+    background: var(--gradient-cta);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#top" class="logo"><span class="logo-icon">♪</span> scenario</a>
+    <nav class="nav-links">
+      <a href="#fonctionnement" class="nav-link">Comment ça marche</a>
+      <a href="#particuliers" class="nav-link">Particuliers</a>
+      <a href="#artistes" class="nav-link">Artistes</a>
+      <a href="demo.html" class="nav-link">Voir la démo</a>
+    </nav>
+    <div class="header-cta">
+      <a href="#particuliers" class="btn btn-primary btn-sm">Être prévenu</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <span class="eyebrow">✨ Pré-lancement · Île-de-France · Été 2026</span>
+    <h1>L'artiste qui rendra<br><span class="accent">votre événement inoubliable</span></h1>
+    <p class="hero-sub">
+      Scenario met en relation les particuliers et les artistes du spectacle vivant
+      — musiciens, chanteurs, comédiens, magiciens — pour des événements privés mémorables.
+      Sans appels téléphoniques sans fin, sans paperasse oubliée.
+    </p>
+    <div class="hero-ctas">
+      <a href="#particuliers" class="btn btn-primary btn-lg">Je cherche un artiste</a>
+      <a href="#artistes" class="btn btn-ghost btn-lg">Je suis un artiste</a>
+    </div>
+    <a href="demo.html" class="demo-link">Voir un aperçu de la plateforme →</a>
+  </div>
+</section>
+
+<!-- ============ TRUST ============ -->
+<section class="trust" style="padding: 40px 32px;">
+  <div class="trust-inner">
+    <div><div class="trust-num">220 000</div><div class="trust-lbl">mariages / an en France</div></div>
+    <div><div class="trust-num">3 200</div><div class="trust-lbl">artistes pré-inscrits</div></div>
+    <div><div class="trust-num">100 %</div><div class="trust-lbl">conforme GUSO</div></div>
+    <div><div class="trust-num">48 h</div><div class="trust-lbl">pour recevoir un devis</div></div>
+  </div>
+</section>
+
+<!-- ============ USP ============ -->
+<section class="usp-bg">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-eyebrow">Pourquoi Scenario</div>
+      <h2 class="section-title">Trouver un artiste, ça ne devrait pas être un parcours du combattant.</h2>
+      <p class="section-sub">Une plateforme pensée pour les deux côtés : ceux qui veulent un beau souvenir, et ceux qui veulent en vivre.</p>
+    </div>
+
+    <div class="usp-grid">
+      <div class="usp-card">
+        <div class="usp-icon-wrap">🎵</div>
+        <h3>Une offre large et qualifiée</h3>
+        <p>Musique, théâtre, magie, conte, danse. Tous nos artistes sont vérifiés et notés par leurs précédents clients. Vous savez exactement ce que vous réservez.</p>
+      </div>
+      <div class="usp-card featured">
+        <span class="usp-badge">Notre signature</span>
+        <div class="usp-icon-wrap">📋</div>
+        <h3>GUSO inclus, zéro paperasse</h3>
+        <p>La déclaration URSSAF obligatoire pour les particuliers est pré-remplie automatiquement à partir de votre réservation. Vous n'avez plus qu'à signer.</p>
+      </div>
+      <div class="usp-card">
+        <div class="usp-icon-wrap">🛡️</div>
+        <h3>Paiement séquestré</h3>
+        <p>Votre paiement n'est libéré à l'artiste qu'après la prestation. Litige ? Notre équipe arbitre sous 48h. Sécurité totale, des deux côtés.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="fonctionnement">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-eyebrow">Comment ça marche</div>
+      <h2 class="section-title">Trois étapes, un événement, un souvenir.</h2>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Vous décrivez votre événement</h3>
+        <p>Date, lieu, nombre d'invités, ambiance recherchée, budget. En quelques minutes, Scenario comprend ce que vous voulez vivre.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Trois artistes vous répondent</h3>
+        <p>Sous 48h, deux ou trois artistes sélectionnés pour leur expertise et leur affinité avec votre projet vous proposent un devis personnalisé.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Le jour J, vous profitez</h3>
+        <p>Scenario gère le paiement sécurisé, le contrat, et la déclaration GUSO obligatoire. Vous accueillez vos invités. La magie, c'est l'artiste qui s'en charge.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PREVIEW ============ -->
+<section class="preview-bg">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-eyebrow">Aperçu</div>
+      <h2 class="section-title">À quoi ressemblera la plateforme.</h2>
+      <p class="section-sub">Un aperçu cliquable du parcours utilisateur. Pré-lancement officiel à l'été 2026.</p>
+    </div>
+
+    <div class="preview-frame">
+      <div class="preview-bar">
+        <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+        <div class="preview-url">scenario.fr</div>
+      </div>
+      <div class="preview-iframe-wrap">
+        <iframe class="preview-iframe" src="demo.html" title="Aperçu de la plateforme Scenario"></iframe>
+        <div class="preview-overlay">
+          <a href="demo.html" class="btn btn-primary btn-lg preview-cta">
+            Explorer la démo cliquable →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORM PARTICULIERS ============ -->
+<section class="form-section" id="particuliers">
+  <div class="form-grid">
+    <div class="form-text">
+      <div class="section-eyebrow">Pour les particuliers</div>
+      <h2>Vous préparez un événement&nbsp;?</h2>
+      <p>
+        Scenario organise les premières mises en relation à Paris et en Île-de-France
+        cet été. Inscrivez-vous pour être contacté en priorité dès l'ouverture.
+      </p>
+      <ul>
+        <li>Aucun engagement, aucun frais d'inscription</li>
+        <li>Vous êtes prévenu en avant-première du lancement</li>
+        <li>Premiers utilisateurs : 50&nbsp;% de réduction sur les frais de service</li>
+        <li>Service GUSO offert sur la première réservation</li>
+      </ul>
+    </div>
+
+    <div class="form-card">
+      <h3>Être prévenu de l'ouverture</h3>
+      <p class="card-sub">Renseignez quelques infos, on vous recontacte avant tout le monde.</p>
+
+      <!-- ⚠ REMPLACER l'attribut action par votre endpoint Formspree (https://formspree.io) -->
+      <form action="https://formspree.io/f/REMPLACER_PAR_VOTRE_ID_FORMSPREE_PARTICULIERS" method="POST">
+        <input type="hidden" name="_subject" value="[Scenario] Nouvelle inscription particulier">
+        <input type="hidden" name="type" value="particulier">
+
+        <div class="form-grid-2">
+          <div class="form-row"><label>Votre nom</label><input type="text" name="nom" required></div>
+          <div class="form-row"><label>Type d'événement</label>
+            <select name="evenement" required>
+              <option value="">— Sélectionner —</option>
+              <option>Mariage</option>
+              <option>Anniversaire</option>
+              <option>Cocktail privé</option>
+              <option>Événement d'entreprise</option>
+              <option>Autre</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row"><label>Email</label><input type="email" name="email" required></div>
+          <div class="form-row"><label>Téléphone (facultatif)</label><input type="tel" name="telephone"></div>
+        </div>
+        <div class="form-row">
+          <label>En quelques mots</label>
+          <textarea name="message" placeholder="La date, le lieu, le nombre d'invités, et le type d'artiste qui vous ferait rêver…"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Être prévenu de l'ouverture</button>
+        <p class="form-disclaimer">En soumettant ce formulaire vous acceptez d'être recontacté par Scenario dans le cadre de la phase de pré-lancement. Vos données ne sont ni revendues ni transmises à des tiers.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORM ARTISTES ============ -->
+<section class="form-section alt" id="artistes">
+  <div class="form-grid">
+    <div class="form-text">
+      <div class="section-eyebrow">Pour les artistes</div>
+      <h2>Musiciens, comédiens, magiciens&nbsp;: rejoignez le réseau.</h2>
+      <p>
+        Scenario vous met en relation avec des particuliers qui valorisent votre travail
+        et acceptent vos tarifs. Vous gardez la main sur votre calendrier et vos cachets.
+        Nous gérons l'administratif et la déclaration GUSO.
+      </p>
+      <ul>
+        <li>Inscription gratuite, sans engagement</li>
+        <li>Profil public à votre image (photos, audios, vidéos)</li>
+        <li>Devis et messagerie intégrés</li>
+        <li>Paiement sécurisé sous 7 jours après prestation</li>
+        <li>Service GUSO automatisé, fini la paperasse</li>
+      </ul>
+    </div>
+
+    <div class="form-card">
+      <h3>Rejoindre le réseau</h3>
+      <p class="card-sub">Pré-inscription. Nous vous contactons pour valider votre profil.</p>
+
+      <!-- ⚠ REMPLACER l'attribut action par votre endpoint Formspree (https://formspree.io) -->
+      <form action="https://formspree.io/f/REMPLACER_PAR_VOTRE_ID_FORMSPREE_ARTISTES" method="POST">
+        <input type="hidden" name="_subject" value="[Scenario] Nouvelle inscription artiste">
+        <input type="hidden" name="type" value="artiste">
+
+        <div class="form-grid-2">
+          <div class="form-row"><label>Nom de scène</label><input type="text" name="nom" required></div>
+          <div class="form-row"><label>Discipline</label>
+            <select name="discipline" required>
+              <option value="">— Sélectionner —</option>
+              <option>Chanteur(euse)</option>
+              <option>Musicien(ne) instrumentiste</option>
+              <option>Groupe / formation</option>
+              <option>DJ</option>
+              <option>Comédien(ne) / stand-up</option>
+              <option>Magicien(ne)</option>
+              <option>Conteur(euse)</option>
+              <option>Danseur(euse)</option>
+              <option>Autre</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row"><label>Email</label><input type="email" name="email" required></div>
+          <div class="form-row"><label>Site, SoundCloud, Instagram… (URL)</label><input type="url" name="portfolio"></div>
+        </div>
+        <div class="form-row">
+          <label>Brièvement : votre expérience et votre statut</label>
+          <textarea name="experience" placeholder="Années d'expérience, statut juridique (intermittent, micro-entrepreneur…), type d'événements que vous animez déjà."></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark btn-block btn-lg">Rejoindre le réseau</button>
+        <p class="form-disclaimer">Inscription sans engagement. Une vérification d'identité et de statut juridique vous sera demandée avant publication du profil.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq-bg">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-eyebrow">Questions fréquentes</div>
+      <h2 class="section-title">Tout ce que vous voulez savoir.</h2>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary class="faq-q">Quand Scenario sera-t-il disponible ?</summary>
+        <p class="faq-a">Le lancement officiel est prévu pour l'été 2026 sur Paris et l'Île-de-France. Les inscrits aux pré-listes sont contactés en priorité dès l'ouverture, avec des conditions préférentielles sur les premières réservations.</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">C'est quoi le GUSO et pourquoi vous en parlez tout le temps ?</summary>
+        <p class="faq-a">Le GUSO (Guichet Unique du Spectacle Occasionnel) est un dispositif obligatoire de l'URSSAF. Tout particulier qui rémunère un artiste du spectacle pour une prestation privée devient légalement employeur et doit déclarer la prestation au GUSO. C'est une obligation légale ignorée par la majorité des organisateurs et mal traitée par les plateformes existantes. Scenario en fait son cœur de promesse : nous gérons cette déclaration pour vous.</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Combien ça coûte ?</summary>
+        <p class="faq-a">Pour les particuliers : pas d'abonnement. Frais de service de 5 % sur la prestation, transparents. Service GUSO en option à 25 € forfaitaires. Pour les artistes : un palier gratuit (5 demandes/mois, 15 % de commission) et un palier Pro à 19 €/mois (illimité, 10 % de commission, plus de visibilité).</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Quels types d'artistes seront référencés ?</summary>
+        <p class="faq-a">Musique (chanteurs, musiciens, groupes, DJ), arts vivants (comédiens stand-up, conteurs, magiciens), animation événementielle (close-up, animation enfants, danseurs). Au lancement, focus sur les artistes professionnels d'Île-de-France.</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Comment garantissez-vous la qualité des artistes ?</summary>
+        <p class="faq-a">Vérification d'identité et de statut juridique à l'inscription. Modération des profils (photos, tarifs). Système de notation des clients après chaque prestation, sans modération de complaisance. Les avis suspects sont signalés et investigués.</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Et si l'artiste annule au dernier moment ?</summary>
+        <p class="faq-a">Notre équipe vous trouve un remplaçant sous 24h selon disponibilité, ou nous vous remboursons intégralement. Conditions détaillées disponibles dans nos CGV à l'ouverture.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-cols">
+      <div>
+        <a class="logo"><span class="logo-icon">♪</span> scenario</a>
+        <p class="footer-brand">
+          La plateforme française de mise en relation entre particuliers et artistes du spectacle vivant.<br>
+          Lancement Île-de-France · Été 2026.
+        </p>
+      </div>
+      <div>
+        <h4>Produit</h4>
+        <ul>
+          <li><a href="#fonctionnement">Comment ça marche</a></li>
+          <li><a href="demo.html">Voir la démo</a></li>
+          <li><a href="#particuliers">Pour les particuliers</a></li>
+          <li><a href="#artistes">Pour les artistes</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:contact@scenario.fr">contact@scenario.fr</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Politique de confidentialité</a></li>
+          <li><a href="#">CGU/CGV</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Scenario · SAS au capital de 1 000 €</span>
+      <span>SIRET : à compléter · RCS : à compléter</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
